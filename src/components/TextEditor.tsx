@@ -1,12 +1,15 @@
-import Editor from '@monaco-editor/react'
-
+import Editor from '@monaco-editor/react';
 
 export const TextEditor = () => {
+
+  // get the value of the editor
+  const handleEditorDidMount = (getValue: any, monacoEditor: any) => {
+    // console.log(getValue);
+  };
 
   return (
     <Editor
       theme="vs-dark"
-      keepCurrentModel={true}
       options={{
         folding: false,
         lineNumbersMinChars: 3,
@@ -14,9 +17,9 @@ export const TextEditor = () => {
         scrollBeyondLastLine: false,
         automaticLayout: true,
       }}
+      onChange={handleEditorDidMount}
       height="61%"
       defaultLanguage="javascript"
-      defaultValue="// some comment"
     />
   )
 }

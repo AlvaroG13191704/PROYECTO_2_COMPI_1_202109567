@@ -19,14 +19,19 @@ const ListFiles = () => {
         {files.map((file) => (
           <button
             key={file.id}
-            className={`px-2 py-1 rounded ${
-              file.active ? "bg-gray-700 text-gray-200" : ""
-            }`}
+            className={`px-2 py-1 rounded ${file.active ? "bg-gray-700 text-gray-200" : ""
+              }`}
             onClick={() => handleClick(file.id)}
           >
             {file.name}
           </button>
         ))}
+        {/* Execute buttom */}
+        <div className="flex flex-row justify-end">
+          <button className="bg-green-600 text-gray-200 px-10 py-1 rounded hover:bg-green-700">
+            Ejecutar
+          </button>
+        </div>
       </div>
     </div>
   );

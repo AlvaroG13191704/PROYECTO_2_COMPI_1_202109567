@@ -1,12 +1,9 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
-  Bars3Icon,
   TableCellsIcon,
   ChartPieIcon,
-  CursorArrowRaysIcon,
   ChartBarIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
@@ -23,16 +20,16 @@ const Navbar = () => {
   return (
     <header className="bg-gray-900">
       <nav className="mx-auto flex max-w-7xl items-center justify-around p-6 lg:px-8" aria-label="Global">
-        <button className="text-sm font-semibold leading-6 text-white hover:border-b-2 border-white">
+        <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400 ">
           Crear archivos
         </button>
-        <button className="text-sm font-semibold leading-6 text-white hover:border-b-2 border-white">
+        <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400">
           Abrir archivos
         </button>
-        <button className="text-sm font-semibold leading-6 text-white hover:border-b-2 border-white">
+        <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400">
           Guardar archivo
         </button>
-        <button className="text-sm font-semibold leading-6 text-white hover:border-b-2 border-white">
+        <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400">
           Eliminar pestaña
         </button>
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
