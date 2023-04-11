@@ -2,13 +2,21 @@ import Editor from '@monaco-editor/react'
 
 
 export const TextEditor = () => {
+
   return (
     <Editor
-      theme='dark' 
-      height="90vh"
+      theme="vs-dark"
+      keepCurrentModel={true}
+      options={{
+        folding: false,
+        lineNumbersMinChars: 3,
+        fontSize: 15,
+        scrollBeyondLastLine: false,
+        automaticLayout: true,
+      }}
+      height="61%"
       defaultLanguage="javascript"
-      defaultValue="// type your code..."
-
+      defaultValue="// some comment"
     />
   )
 }
