@@ -1,5 +1,9 @@
 import { useState } from "react";
+import { useResultStore } from "../store/resultStore";
 const ListFiles = () => {
+
+  // get the store 
+  const result = useResultStore((state) => state.result);
 
   const [files, setFiles] = useState([
     { id: 1, name: "archivoPrueba.tw", active: true },
@@ -13,6 +17,11 @@ const ListFiles = () => {
     );
     setFiles(updatedFiles);
   };
+
+  // handle execute button
+  const handleExecute = () => {
+    console.log(result);
+  }
   return (
     <div className="bg-gray-900 text-gray-400  flex flex-col">
       <div className="px-4 py-2 border-b border-gray-700">
@@ -28,7 +37,10 @@ const ListFiles = () => {
         ))}
         {/* Execute buttom */}
         <div className="flex flex-row justify-end">
-          <button className="bg-green-600 text-gray-200 px-10 py-1 rounded hover:bg-green-700">
+          <button 
+            onClick={handleExecute}
+            className="bg-green-600 text-gray-200 px-10 py-1 rounded hover:bg-green-700"
+            >
             Ejecutar
           </button>
         </div>

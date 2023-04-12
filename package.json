@@ -6,18 +6,24 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tjison": "ts-jison -t typescript -n Parser -n Parser -o src/interpreter/analyzer/parser.ts src/interpreter/jison/analyzer.jison"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.17",
     "@monaco-editor/react": "^4.4.6",
+    "@ts-jison/common": "^0.3.0",
+    "@ts-jison/lexer": "^0.3.0",
+    "@ts-jison/parser": "^0.3.0",
+    "@ts-jison/parser-generator": "^0.3.0",
     "heroicons": "^2.0.17",
     "jison": "^0.4.18",
     "monaco-editor": "^0.36.1",
     "nodemon": "^2.0.22",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

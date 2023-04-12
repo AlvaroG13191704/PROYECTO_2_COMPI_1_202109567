@@ -1,13 +1,20 @@
 import Editor from '@monaco-editor/react';
+import { useState } from 'react';
+import { Analizador } from '../Parser/Analyzer/Ana';
+
+
 
 export const TextEditor = () => {
 
+
   // get the value of the editor
   const handleEditorDidMount = (getValue: any, monacoEditor: any) => {
-    // console.log(getValue);
+    console.log(getValue);
   };
 
+
   return (
+    // Agregar un boton
     <Editor
       theme="vs-dark"
       options={{
