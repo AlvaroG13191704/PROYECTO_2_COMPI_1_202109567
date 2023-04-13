@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useResultStore } from "../store/resultStore";
+import { analyzeStore } from "../store/resultStore";
 const ListFiles = () => {
 
   // get the store 
-  const result = useResultStore((state) => state.result);
+  const result = analyzeStore((state) => state.grammar);
 
   const [files, setFiles] = useState([
     { id: 1, name: "archivoPrueba.tw", active: true },

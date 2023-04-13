@@ -1,4 +1,10 @@
+import { analyzeStore } from "../store/resultStore"
+
 const Console = () => {
+
+  // get state
+  const result = analyzeStore((state) => state.result)
+  const error = analyzeStore((state) => state.error)
 
   return (
     // Console similar to the visual studio code console

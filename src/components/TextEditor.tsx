@@ -1,15 +1,17 @@
 import Editor from '@monaco-editor/react';
-import { useState } from 'react';
-import { Analizador } from '../Parser/Analyzer/Ana';
+import { analyzeStore } from '../store/resultStore';
 
 
 
 export const TextEditor = () => {
 
+  // state
+  const { updateCurrentCode } = analyzeStore()
 
   // get the value of the editor
   const handleEditorDidMount = (getValue: any, monacoEditor: any) => {
-    console.log(getValue);
+    // change the value of the current grammar
+    updateCurrentCode(getValue)
   };
 
 
@@ -26,7 +28,7 @@ export const TextEditor = () => {
       }}
       onChange={handleEditorDidMount}
       height="61%"
-      defaultLanguage="javascript"
+      defaultLanguage="java"
     />
   )
 }
