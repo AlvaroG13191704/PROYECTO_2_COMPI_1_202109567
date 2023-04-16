@@ -21,34 +21,25 @@ frac                        (?:\.[0-9]+)
 
 /* Tokens */
 \s+                            {/* skip whitespace */}
-<<EOF>>                        { return 'EOF'; }  /* end of file */
 
 /* Comments */
-"//".*                            {/* skip comments */}
-[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]    {/* IGNORE */}
-
-/* =================== Regular expresions =================== */
-([a-zA-ZÑñ]|("_"[a-zA-ZÑñ]))([a-zA-ZÑñ]|[0-9]|"_")*             yytext = yytext.toLowerCase();          return 't_id';
-\"(?:[{kOpen}|{kEnd}]|["\\"]["bnrt/["\\"]]|[^"["\\"])*\"         yytext = yytext.substr(1,yyleng-2);    return 't_stringWord'; // substr to remove the quotes
-\'(?:{esc}["bfnrt/{esc}]|{esc}"u"[a-fA-F0-9]{4}|[^"{esc}])\'    yytext = yytext.substr(1,yyleng-2);     return 't_character'// substr to remove the quotes
-{int}{frac}\b                                                                                           return 't_float'
-{int}\b                                                                                                 return 't_integer'
-\"([^\"\\]|\\.)*\"                                                                                      return 't_scapeSecuence'
+(\/\/).*                               {/* line comment */}
+[ \r\t]                                {/* white space */}
+\n                                     {/* white space */}
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]    {/* multi comment */}
 
 /* =================== Reserved words =================== */
 /* Data types */
-"int"                           { return 't_int'; }        // default 0
-"double"                        { return 't_double'; }    // default 0.0
-"boolean"                       { return 't_boolean'; }  // default True
-"char"                          { return 't_char'; }    // default '\u0000'
-"string"                        { return 't_string'; } // default ""
+"int"                           { return 'tint'; }        // default 0
+"double"                        { return 'tdouble'; }    // default 0.0
+"boolean"                       { return 'tboolean'; }  // default True
+"char"                          { return 'tchar'; }    // default '\u0000'
+"string"                        { return 'tstring'; } // default ""
 
-/* Scape secuences */
-"\\n"                           { return 't_newline'; }
-"\\\\"                          { return 't_backslash'; }
-"\\\""                          { return 't_double_quote'; }
-"\\t"                           { return 't_tab'; }
-"\\'"                           { return 't_single_quote'; }
+/* boolean values */
+"true"                          { return 't_true'; }
+"false"                         { return 't_false'; }
+
 
 /* data structures */
 "new"                           { return 't_new'; }
@@ -82,9 +73,9 @@ frac                        (?:\.[0-9]+)
 "typeOf"                        { return 't_typeOf'; }
 "toString"                      { return 't_toString'; }
 "toCharArray"                   { return 't_toCharArray'; }
-"main"                          { return 't_main'; } // only one per program
 
-/* mehtods */
+/* mehtods && callbacks */
+"main"                          { return 't_main'; } // only one per program
 "void"                          { return 't_void'; }
 
 /* =================== signs and symbols =================== */
@@ -126,24 +117,36 @@ frac                        (?:\.[0-9]+)
 "["                             {return '[';}
 "]"                             {return ']';}
 
+
+/* =================== Regular expresions =================== */
+([a-zA-ZÑñ]|("_"[a-zA-ZÑñ]))([a-zA-ZÑñ]|[0-9]|"_")*             yytext = yytext.toLowerCase();          return 'id';
+\'(?:{esc}["bfnrt/{esc}]|{esc}"u"[a-fA-F0-9]{4}|[^"{esc}])\'    yytext = yytext.substr(1,yyleng-2);     return 'character'// substr to remove the quotes
+{int}{frac}\b                                                                                           return 'float'
+{int}\b                                                                                                 return 'integer'
+\"(?:[{cor1}|{cor2}]|["\\"]["bnrt/["\\"]]|[^"["\\"])*\"         yytext = yytext.substr(1,yyleng-2);     return 'words';
+
+<<EOF>>                        { return 'EOF'; }  /* end of file */ 
 .                               {console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);}
 
 /lex
 
 /* =================== ASSOCIATION AND PRECEDENCE OF OPERATORS =================== */
-/* logic operators */
+// Incremento y decremento
 %left '++' '--'
-%left '^'
-%left '||'
-%left '&&'
-%left '!=' '=='
-%left '>' '<' '<=' '>=' 
 
-/* arithmetic operators */
-%left '+' '-'
+// Operaciones logicas y relacionales
+%left '&&'
+%left '||'
+%left '!=' '==' '==='
+%left '>' '<' '<=' '>=' 
+%right '!' '('
+
+// Operaciones numericas
+%right negative
+%nonassoc '^' 
 %left '*' '/' '%'
-%right '^^' 
-%right UMINUS '!' '(' 
+%left '+' '-'
+%left '?'
 
 /* =================== GRAMMAR =================== */
 
@@ -151,9 +154,160 @@ frac                        (?:\.[0-9]+)
 
 %% /* =================== LEFT RECURSIVITY =================== */
 
-INIT: t_add EOF
+INIT: SENTENCES EOF
     {
-        console.log("Parse de Jison entrada: OK ");
+      console.log("Parse de Jison entrada: OK ");
+      let raiz = $1
+      $$ = raiz;
+      console.log($$)
+      return raiz;
     }
-;
+    ;
+
+SENTENCES : SENTENCES SENTENCE
+          {
+            $1.push($2);
+            $$ = $1;
+          }
+          | SENTENCE
+          {
+            let arr = [];
+            arr.push($1);
+            $$ = arr;
+          }
+          ;
+
+SENTENCE : DECLARATION ';' { $$ = $1; }
+         | ASSIGNMENT  ';' { $$ = $1; }
+         | error      ';' 
+          {
+            console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this.$.first_line + ', en la columna: ' + this.$.first_column);
+            $$ = null;
+          }
+         ;
+
+DECLARATION : TYPE id '=' EXP
+            {
+              $$ = {
+                type: 'declaration',
+                value: $1,
+                id: $2,
+                exp: $4
+              }
+            }
+            | TYPE id '=' '(' TYPE ')' EXP 
+            {
+              $$ = {
+                type: 'declaration with cast',
+                type_: $1,
+                id: $2,
+                type_cast: $5,
+                exp: $7
+              }
+            }
+            | TYPE id 
+            {
+              $$ = {
+                type: 'declaration',
+                value: $1,
+                id: $2
+              }
+            }
+            | TYPE'['']' id '=' t_new TYPE'[' EXP ']' 
+            {
+              $$ = {
+                type: 'declaration vector 1',
+                type_: $1,
+                id: $4,
+                exp: $9,
+              }
+            }
+            | TYPE'['']' id '=' '{' LISTEXP '}' 
+            {
+              $$ = {
+                type: 'declaration vector 2',
+                id: $4,
+                exps: $7
+              }
+            }
+            | t_list '<' TYPE '>' id '=' t_new t_list '<' TYPE '>'
+            {
+              $$ = {
+                type: 'declaration list ',
+                type_: $3,
+                id: $5,
+              }
+            }
+            ;
+
+LISTEXP    : LISTEXP ',' EXP
+           {
+            $1.push($3);
+            $$ = $1;
+           }
+           | EXP
+           {
+            let arrlistEXP = [];
+            arrlistEXP.push($1);
+            $$ = arrlistEXP;
+           }
+           ;
+
+ASSIGNMENT : id '=' EXP 
+            {
+              $$ = {
+                type: 'assignment',
+                id: $1,
+                exp: $3
+              }
+            }
+           | id '+''+'
+           {
+            $$ = {
+              type: 'increment',
+              id: $1
+            }
+           }
+           | id '-''-'
+           {
+            $$ = {
+              type: 'decrement',
+              id: $1
+            }
+           }
+           ;
+
+TYPE      : tint     { $$ = $1;}
+          | tdouble  { $$ = $1;}
+          | tboolean { $$ = $1;}
+          | tchar    { $$ = $1;}
+          | tstring  { $$ = $1;}
+          ;
+
+EXP       : EXP '+' EXP            { $$ = {type: 'add', left: $1, right: $3}; }
+          | EXP '-' EXP            { $$ = {type: 'sub', left: $1, right: $3}; }
+          | EXP '*' EXP            { $$ = {type: 'mul', left: $1, right: $3}; }
+          | EXP '/' EXP            { $$ = {type: 'div', left: $1, right: $3}; }
+          | EXP '^' EXP            { $$ = {type: 'pow', left: $1, right: $3}; }
+          | EXP '%' EXP            { $$ = {type: 'mod', left: $1, right: $3}; }
+          | '-' EXP %prec negative { $$ = {type: 'negative', value: $2}; }
+          | '(' EXP ')'            { $$ = $2; }
+          | EXP '==' EXP           { $$ = {type: 'eq', left: $1, right: $3}; }
+          | EXP '!=' EXP           { $$ = {type: 'neq', left: $1, right: $3}; }
+          | EXP '<' EXP            { $$ = {type: 'lt', left: $1, right: $3}; }
+          | EXP '>' EXP            { $$ = {type: 'gt', left: $1, right: $3}; }
+          | EXP '<=' EXP           { $$ = {type: 'lte', left: $1, right: $3}; }
+          | EXP '>=' EXP           { $$ = {type: 'gte', left: $1, right: $3}; }
+          | EXP '&&' EXP           { $$ = {type: 'and', left: $1, right: $3}; }
+          | EXP '||' EXP           { $$ = {type: 'or', left: $1, right: $3}; }
+          | EXP '?' EXP ':' EXP    { $$ = {type: 'ternary', left: $1, middle: $3, right: $5}; }
+          | '!' EXP                { $$ = {type: 'not', exp: $2}; }
+          | id                     { $$ = $1;}
+          | integer                { $$ = $1;}
+          | float                  { $$ = $1;}
+          | words                  { $$ = $1;}
+          | t_true                 { $$ = $1;}
+          | t_false                { $$ = $1;}
+          | character              { $$ = $1;}
+          ;
 

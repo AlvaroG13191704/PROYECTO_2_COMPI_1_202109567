@@ -2,7 +2,7 @@
 /**
  * Returns a Parser implementing JisonParserApi and a Lexer implementing JisonLexerApi.
  */
-import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, ProductionsType, o } from '@ts-jison/parser';const noCommonCode=true;
+import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, ProductionsType, o } from '@ts-jison/parser';const $V0=[1,6],$V1=[1,9],$V2=[1,8],$V3=[1,10],$V4=[1,11],$V5=[1,12],$V6=[1,13],$V7=[1,14],$V8=[2,5,11,22,28,29,30,31,32],$V9=[11,15,16,24],$Va=[1,33],$Vb=[1,31],$Vc=[1,30],$Vd=[1,32],$Ve=[1,34],$Vf=[1,35],$Vg=[1,36],$Vh=[1,37],$Vi=[1,38],$Vj=[1,39],$Vk=[1,54],$Vl=[1,55],$Vm=[1,46],$Vn=[1,47],$Vo=[1,48],$Vp=[1,49],$Vq=[1,50],$Vr=[1,51],$Vs=[1,52],$Vt=[1,53],$Vu=[1,56],$Vv=[1,57],$Vw=[1,58],$Vx=[1,59],$Vy=[1,60],$Vz=[8,15,17,21,23,24,25,26,27,33,34,35,36,37,38,39,40,41,42,43,44],$VA=[8,15,17,21,23,24,25,37,38,39,40,41,42,44],$VB=[8,15,17,21,23,24,25,26,27,33,34,35,36,37,38,39,40,41,42,44],$VC=[8,15,17,21,23,24,25,33,34,35,36,37,38,39,40,41,42,44],$VD=[8,15,17,21,25,37,38,41,42,44],$VE=[21,25];
 
 export class ParserParser extends JisonParser implements JisonParserApi {
     $?: any;
@@ -11,11 +11,11 @@ export class ParserParser extends JisonParser implements JisonParserApi {
       super(yy, lexer);
     }
 
-    symbols_: SymbolsType = {"error":2,"INIT":3,"t_add":4,"EOF":5,"$accept":0,"$end":1};
-    terminals_: TerminalsType = {2:"error",4:"t_add",5:"EOF"};
-    productions_: ProductionsType = [0,[3,2]];
-    table: Array<StateType> = [{3:1,4:[1,2]},{1:[3]},{5:[1,3]},{1:[2,1]}];
-    defaultActions: {[key:number]: any} = {3:[2,1]};
+    symbols_: SymbolsType = {"error":2,"INIT":3,"SENTENCES":4,"EOF":5,"SENTENCE":6,"DECLARATION":7,";":8,"ASSIGNMENT":9,"TYPE":10,"id":11,"=":12,"EXP":13,"(":14,")":15,"[":16,"]":17,"t_new":18,"{":19,"LISTEXP":20,"}":21,"t_list":22,"<":23,">":24,",":25,"+":26,"-":27,"tint":28,"tdouble":29,"tboolean":30,"tchar":31,"tstring":32,"*":33,"/":34,"^":35,"%":36,"==":37,"!=":38,"<=":39,">=":40,"&&":41,"||":42,"?":43,":":44,"!":45,"integer":46,"float":47,"words":48,"t_true":49,"t_false":50,"character":51,"$accept":0,"$end":1};
+    terminals_: TerminalsType = {2:"error",5:"EOF",8:";",11:"id",12:"=",14:"(",15:")",16:"[",17:"]",18:"t_new",19:"{",21:"}",22:"t_list",23:"<",24:">",25:",",26:"+",27:"-",28:"tint",29:"tdouble",30:"tboolean",31:"tchar",32:"tstring",33:"*",34:"/",35:"^",36:"%",37:"==",38:"!=",39:"<=",40:">=",41:"&&",42:"||",43:"?",44:":",45:"!",46:"integer",47:"float",48:"words",49:"t_true",50:"t_false",51:"character"};
+    productions_: ProductionsType = [0,[3,2],[4,2],[4,1],[6,2],[6,2],[6,2],[7,4],[7,7],[7,2],[7,10],[7,8],[7,11],[20,3],[20,1],[9,3],[9,3],[9,3],[10,1],[10,1],[10,1],[10,1],[10,1],[13,3],[13,3],[13,3],[13,3],[13,3],[13,3],[13,2],[13,3],[13,3],[13,3],[13,3],[13,3],[13,3],[13,3],[13,3],[13,3],[13,5],[13,2],[13,1],[13,1],[13,1],[13,1],[13,1],[13,1],[13,1]];
+    table: Array<StateType> = [{2:$V0,3:1,4:2,6:3,7:4,9:5,10:7,11:$V1,22:$V2,28:$V3,29:$V4,30:$V5,31:$V6,32:$V7},{1:[3]},{2:$V0,5:[1,15],6:16,7:4,9:5,10:7,11:$V1,22:$V2,28:$V3,29:$V4,30:$V5,31:$V6,32:$V7},o($V8,[2,3]),{8:[1,17]},{8:[1,18]},{8:[1,19]},{11:[1,20],16:[1,21]},{23:[1,22]},{12:[1,23],26:[1,24],27:[1,25]},o($V9,[2,18]),o($V9,[2,19]),o($V9,[2,20]),o($V9,[2,21]),o($V9,[2,22]),{1:[2,1]},o($V8,[2,2]),o($V8,[2,4]),o($V8,[2,5]),o($V8,[2,6]),{8:[2,9],12:[1,26]},{17:[1,27]},{10:28,28:$V3,29:$V4,30:$V5,31:$V6,32:$V7},{11:$Va,13:29,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{26:[1,40]},{27:[1,41]},{11:$Va,13:42,14:[1,43],27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:[1,44]},{24:[1,45]},{8:[2,15],23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,41:$Vw,42:$Vx,43:$Vy},{11:$Va,13:61,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:62,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:63,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},o($Vz,[2,41]),o($Vz,[2,42]),o($Vz,[2,43]),o($Vz,[2,44]),o($Vz,[2,45]),o($Vz,[2,46]),o($Vz,[2,47]),{8:[2,16]},{8:[2,17]},{8:[2,7],23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,41:$Vw,42:$Vx,43:$Vy},{10:64,11:$Va,13:62,14:$Vb,27:$Vc,28:$V3,29:$V4,30:$V5,31:$V6,32:$V7,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{12:[1,65]},{11:[1,66]},{11:$Va,13:67,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:68,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:69,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:70,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:71,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:72,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:73,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:74,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:75,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:76,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:77,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:78,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:79,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:80,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{11:$Va,13:81,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},o($VA,[2,29],{26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,43:$Vy}),{15:[1,82],23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,41:$Vw,42:$Vx,43:$Vy},o($VA,[2,40],{26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,43:$Vy}),{15:[1,83]},{18:[1,84],19:[1,85]},{12:[1,86]},o($VB,[2,23],{43:$Vy}),o($VB,[2,24],{43:$Vy}),o($VC,[2,25],{26:$Vm,27:$Vn,43:$Vy}),o($VC,[2,26],{26:$Vm,27:$Vn,43:$Vy}),o($VA,[2,27],{26:$Vm,27:$Vn,33:$Vo,34:$Vp,36:$Vr,43:$Vy}),o($VC,[2,28],{26:$Vm,27:$Vn,43:$Vy}),o($VD,[2,31],{23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,39:$Vu,40:$Vv,43:$Vy}),o($VD,[2,32],{23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,39:$Vu,40:$Vv,43:$Vy}),o($VA,[2,33],{26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,43:$Vy}),o($VA,[2,34],{26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,43:$Vy}),o($VA,[2,35],{26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,43:$Vy}),o($VA,[2,36],{26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,43:$Vy}),o([8,15,17,21,25,41,44],[2,37],{23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,42:$Vx,43:$Vy}),o([8,15,17,21,25,41,42,44],[2,38],{23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,43:$Vy}),{23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,41:$Vw,42:$Vx,43:$Vy,44:[1,87]},o($Vz,[2,30]),{11:$Va,13:88,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{10:89,28:$V3,29:$V4,30:$V5,31:$V6,32:$V7},{11:$Va,13:91,14:$Vb,20:90,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{18:[1,92]},{11:$Va,13:93,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{8:[2,8],23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,41:$Vw,42:$Vx,43:$Vy},{16:[1,94]},{21:[1,95],25:[1,96]},o($VE,[2,14],{23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,41:$Vw,42:$Vx,43:$Vy}),{22:[1,97]},o($Vz,[2,39]),{11:$Va,13:98,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{8:[2,11]},{11:$Va,13:99,14:$Vb,27:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj},{23:[1,100]},{17:[1,101],23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,41:$Vw,42:$Vx,43:$Vy},o($VE,[2,13],{23:$Vk,24:$Vl,26:$Vm,27:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr,37:$Vs,38:$Vt,39:$Vu,40:$Vv,41:$Vw,42:$Vx,43:$Vy}),{10:102,28:$V3,29:$V4,30:$V5,31:$V6,32:$V7},{8:[2,10]},{24:[1,103]},{8:[2,12]}];
+    defaultActions: {[key:number]: any} = {15:[2,1],40:[2,16],41:[2,17],95:[2,11],101:[2,10],103:[2,12]};
 
     performAction (yytext:string, yyleng:number, yylineno:number, yy:any, yystate:number /* action[1] */, $$:any /* vstack */, _$:any /* lstack */): any {
 /* this == yyval */
@@ -23,8 +23,184 @@ export class ParserParser extends JisonParser implements JisonParserApi {
         switch (yystate) {
 case 1:
 
-        console.log("Parse de Jison entrada: OK ");
+      console.log("Parse de Jison entrada: OK ");
+      let raiz = $$[$0-1]
+      this.$ = raiz;
+      console.log(this.$)
+      return raiz;
     
+break;
+case 2:
+
+            $$[$0-1].push($$[$0]);
+            this.$ = $$[$0-1];
+          
+break;
+case 3:
+
+            let arr = [];
+            arr.push($$[$0]);
+            this.$ = arr;
+          
+break;
+case 4: case 5: case 30:
+ this.$ = $$[$0-1]; 
+break;
+case 6:
+
+            console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this.$.first_line + ', en la columna: ' + this.$.first_column);
+            this.$ = null;
+          
+break;
+case 7:
+
+              this.$ = {
+                type: 'declaration',
+                value: $$[$0-3],
+                id: $$[$0-2],
+                exp: $$[$0]
+              }
+            
+break;
+case 8:
+
+              this.$ = {
+                type: 'declaration with cast',
+                type_: $$[$0-6],
+                id: $$[$0-5],
+                type_cast: $$[$0-2],
+                exp: $$[$0]
+              }
+            
+break;
+case 9:
+
+              this.$ = {
+                type: 'declaration',
+                value: $$[$0-1],
+                id: $$[$0]
+              }
+            
+break;
+case 10:
+
+              this.$ = {
+                type: 'declaration vector 1',
+                type_: $$[$0-9],
+                id: $$[$0-6],
+                exp: $$[$0-1],
+              }
+            
+break;
+case 11:
+
+              this.$ = {
+                type: 'declaration vector 2',
+                id: $$[$0-4],
+                exps: $$[$0-1]
+              }
+            
+break;
+case 12:
+
+              this.$ = {
+                type: 'declaration list ',
+                type_: $$[$0-8],
+                id: $$[$0-6],
+              }
+            
+break;
+case 13:
+
+            $$[$0-2].push($$[$0]);
+            this.$ = $$[$0-2];
+           
+break;
+case 14:
+
+            let arrlistEXP = [];
+            arrlistEXP.push($$[$0]);
+            this.$ = arrlistEXP;
+           
+break;
+case 15:
+
+              this.$ = {
+                type: 'assignment',
+                id: $$[$0-2],
+                exp: $$[$0]
+              }
+            
+break;
+case 16:
+
+            this.$ = {
+              type: 'increment',
+              id: $$[$0-2]
+            }
+           
+break;
+case 17:
+
+            this.$ = {
+              type: 'decrement',
+              id: $$[$0-2]
+            }
+           
+break;
+case 18: case 19: case 20: case 21: case 22: case 41: case 42: case 43: case 44: case 45: case 46: case 47:
+ this.$ = $$[$0];
+break;
+case 23:
+ this.$ = {type: 'add', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 24:
+ this.$ = {type: 'sub', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 25:
+ this.$ = {type: 'mul', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 26:
+ this.$ = {type: 'div', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 27:
+ this.$ = {type: 'pow', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 28:
+ this.$ = {type: 'mod', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 29:
+ this.$ = {type: 'negative', value: $$[$0]}; 
+break;
+case 31:
+ this.$ = {type: 'eq', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 32:
+ this.$ = {type: 'neq', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 33:
+ this.$ = {type: 'lt', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 34:
+ this.$ = {type: 'gt', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 35:
+ this.$ = {type: 'lte', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 36:
+ this.$ = {type: 'gte', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 37:
+ this.$ = {type: 'and', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 38:
+ this.$ = {type: 'or', left: $$[$0-2], right: $$[$0]}; 
+break;
+case 39:
+ this.$ = {type: 'ternary', left: $$[$0-4], middle: $$[$0-2], right: $$[$0]}; 
+break;
+case 40:
+ this.$ = {type: 'not', exp: $$[$0]}; 
 break;
         }
     }
@@ -39,162 +215,158 @@ export class ParserLexer extends JisonLexer implements JisonLexerApi {
         super(yy);
     }
 
-    rules: RegExp[] = [/^(?:\s+)/i,/^(?:$)/i,/^(?:\/\/.*)/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:([a-zA-ZÑñ]|(_[a-zA-ZÑñ]))([a-zA-ZÑñ]|[0-9]|_)*)/i,/^(?:"(?:[(\[)|(\])]|["\\"]["bnrt/["\\"]|[^"["\\"])*")/i,/^(?:'(?:(\\)["bfnrt/(\\)]|(\\)u[a-fA-F0-9]{4}|[^"(\\)])')/i,/^(?:((?:[0-9]|[1-9][0-9]+))((?:\.[0-9]+))\b)/i,/^(?:((?:[0-9]|[1-9][0-9]+))\b)/i,/^(?:"([^\"\\]|\\.)*")/i,/^(?:int\b)/i,/^(?:double\b)/i,/^(?:boolean\b)/i,/^(?:char\b)/i,/^(?:string\b)/i,/^(?:\\n)/i,/^(?:\\\\)/i,/^(?:\\")/i,/^(?:\\t)/i,/^(?:\\')/i,/^(?:new\b)/i,/^(?:list\b)/i,/^(?:add\b)/i,/^(?:if\b)/i,/^(?:else\b)/i,/^(?:switch\b)/i,/^(?:case\b)/i,/^(?:default\b)/i,/^(?:while\b)/i,/^(?:for\b)/i,/^(?:do\b)/i,/^(?:break\b)/i,/^(?:continue\b)/i,/^(?:return\b)/i,/^(?:print\b)/i,/^(?:toLower\b)/i,/^(?:toUpper\b)/i,/^(?:length\b)/i,/^(?:truncate\b)/i,/^(?:round\b)/i,/^(?:typeOf\b)/i,/^(?:toString\b)/i,/^(?:toCharArray\b)/i,/^(?:main\b)/i,/^(?:void\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:\^)/i,/^(?:%)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:<=)/i,/^(?:>)/i,/^(?:>=)/i,/^(?:\?)/i,/^(?::)/i,/^(?:\|\|)/i,/^(?:&&)/i,/^(?:!)/i,/^(?:\()/i,/^(?:\))/i,/^(?:=)/i,/^(?:\+\+)/i,/^(?:--)/i,/^(?:\$)/i,/^(?:;)/i,/^(?:,)/i,/^(?:\.)/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\[)/i,/^(?:\])/i,/^(?:.)/i];
-    conditions: any = {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75],"inclusive":true}}
+    rules: RegExp[] = [/^(?:\s+)/i,/^(?:(\/\/).*)/i,/^(?:[ \r\t])/i,/^(?:\n)/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:int\b)/i,/^(?:double\b)/i,/^(?:boolean\b)/i,/^(?:char\b)/i,/^(?:string\b)/i,/^(?:true\b)/i,/^(?:false\b)/i,/^(?:new\b)/i,/^(?:list\b)/i,/^(?:add\b)/i,/^(?:if\b)/i,/^(?:else\b)/i,/^(?:switch\b)/i,/^(?:case\b)/i,/^(?:default\b)/i,/^(?:while\b)/i,/^(?:for\b)/i,/^(?:do\b)/i,/^(?:break\b)/i,/^(?:continue\b)/i,/^(?:return\b)/i,/^(?:print\b)/i,/^(?:toLower\b)/i,/^(?:toUpper\b)/i,/^(?:length\b)/i,/^(?:truncate\b)/i,/^(?:round\b)/i,/^(?:typeOf\b)/i,/^(?:toString\b)/i,/^(?:toCharArray\b)/i,/^(?:main\b)/i,/^(?:void\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:\^)/i,/^(?:%)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:<=)/i,/^(?:>)/i,/^(?:>=)/i,/^(?:\?)/i,/^(?::)/i,/^(?:\|\|)/i,/^(?:&&)/i,/^(?:!)/i,/^(?:\()/i,/^(?:\))/i,/^(?:=)/i,/^(?:\+\+)/i,/^(?:--)/i,/^(?:\$)/i,/^(?:;)/i,/^(?:,)/i,/^(?:\.)/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\[)/i,/^(?:\])/i,/^(?:([a-zA-ZÑñ]|(_[a-zA-ZÑñ]))([a-zA-ZÑñ]|[0-9]|_)*)/i,/^(?:'(?:(\\)["bfnrt/(\\)]|(\\)u[a-fA-F0-9]{4}|[^"(\\)])')/i,/^(?:((?:[0-9]|[1-9][0-9]+))((?:\.[0-9]+))\b)/i,/^(?:((?:[0-9]|[1-9][0-9]+))\b)/i,/^(?:"(?:[{cor1}|{cor2}]|["\\"]["bnrt/["\\"]|[^"["\\"])*")/i,/^(?:$)/i,/^(?:.)/i];
+    conditions: any = {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73],"inclusive":true}}
     performAction (yy:any,yy_:any,$avoiding_name_collisions:any,YY_START:any): any {
           var YYSTATE=YY_START;
         switch($avoiding_name_collisions) {
     case 0:/* skip whitespace */
       break;
-    case 1: return 5; 
+    case 1:/* line comment */
       break;
-    case 2:/* skip comments */
+    case 2:/* white space */
       break;
-    case 3:/* IGNORE */
+    case 3:/* white space */
       break;
-    case 4:yy_.yytext = yy_.yytext.toLowerCase();          return 't_id';
+    case 4:/* multi comment */
       break;
-    case 5:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2);    return 't_stringWord'; // substr to remove the quotes
+    case 5: return 28; 
       break;
-    case 6:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2);     return 't_character'// substr to remove the quotes
+    case 6: return 29; 
       break;
-    case 7:return 't_float'
+    case 7: return 30; 
       break;
-    case 8:return 't_integer'
+    case 8: return 31; 
       break;
-    case 9:return 't_scapeSecuence'
+    case 9: return 32; 
       break;
-    case 10: return 't_int'; 
+    case 10: return 49; 
       break;
-    case 11: return 't_double'; 
+    case 11: return 50; 
       break;
-    case 12: return 't_boolean'; 
+    case 12: return 18; 
       break;
-    case 13: return 't_char'; 
+    case 13: return 22; 
       break;
-    case 14: return 't_string'; 
+    case 14: return 't_add'; 
       break;
-    case 15: return 't_newline'; 
+    case 15: return 't_if'; 
       break;
-    case 16: return 't_backslash'; 
+    case 16: return 't_else'; 
       break;
-    case 17: return 't_double_quote'; 
+    case 17: return 't_switch'; 
       break;
-    case 18: return 't_tab'; 
+    case 18: return 't_case'; 
       break;
-    case 19: return 't_single_quote'; 
+    case 19: return 't_default'; 
       break;
-    case 20: return 't_new'; 
+    case 20: return 't_while'; 
       break;
-    case 21: return 't_list'; 
+    case 21: return 't_for'; 
       break;
-    case 22: return 4; 
+    case 22: return 't_do'; 
       break;
-    case 23: return 't_if'; 
+    case 23: return 't_break'; 
       break;
-    case 24: return 't_else'; 
+    case 24: return 't_continue'; 
       break;
-    case 25: return 't_switch'; 
+    case 25: return 't_return'; 
       break;
-    case 26: return 't_case'; 
+    case 26: return 't_print'; 
       break;
-    case 27: return 't_default'; 
+    case 27: return 't_toLower'; 
       break;
-    case 28: return 't_while'; 
+    case 28: return 't_toUpper'; 
       break;
-    case 29: return 't_for'; 
+    case 29: return 't_length'; 
       break;
-    case 30: return 't_do'; 
+    case 30: return 't_truncate'; 
       break;
-    case 31: return 't_break'; 
+    case 31: return 't_round'; 
       break;
-    case 32: return 't_continue'; 
+    case 32: return 't_typeOf'; 
       break;
-    case 33: return 't_return'; 
+    case 33: return 't_toString'; 
       break;
-    case 34: return 't_print'; 
+    case 34: return 't_toCharArray'; 
       break;
-    case 35: return 't_toLower'; 
+    case 35: return 't_main'; 
       break;
-    case 36: return 't_toUpper'; 
+    case 36: return 't_void'; 
       break;
-    case 37: return 't_length'; 
+    case 37:return 26;
       break;
-    case 38: return 't_truncate'; 
+    case 38:return 27;
       break;
-    case 39: return 't_round'; 
+    case 39:return 33;
       break;
-    case 40: return 't_typeOf'; 
+    case 40:return 34;
       break;
-    case 41: return 't_toString'; 
+    case 41:return 35;
       break;
-    case 42: return 't_toCharArray'; 
+    case 42:return 36;
       break;
-    case 43: return 't_main'; 
+    case 43:return 37;
       break;
-    case 44: return 't_void'; 
+    case 44:return 38;
       break;
-    case 45:return '+';
+    case 45:return 23;
       break;
-    case 46:return '-';
+    case 46:return 39;
       break;
-    case 47:return '*';
+    case 47:return 24;
       break;
-    case 48:return '/';
+    case 48:return 40;
       break;
-    case 49:return '^';
+    case 49:return 43;
       break;
-    case 50:return '%';
+    case 50:return 44;
       break;
-    case 51:return '==';
+    case 51:return 42;
       break;
-    case 52:return '!=';
+    case 52:return 41;
       break;
-    case 53:return '<';
+    case 53:return 45;
       break;
-    case 54:return '<=';
+    case 54:return 14;
       break;
-    case 55:return '>';
+    case 55:return 15;
       break;
-    case 56:return '>=';
+    case 56:return 12;
       break;
-    case 57:return '?';
+    case 57:return '++';
       break;
-    case 58:return ':';
+    case 58:return '--';
       break;
-    case 59:return '||';
+    case 59:return '$';
       break;
-    case 60:return '&&';
+    case 60:return 8;
       break;
-    case 61:return '!';
+    case 61:return 25;
       break;
-    case 62:return '(';
+    case 62:return '.';
       break;
-    case 63:return ')';
+    case 63:return 19;
       break;
-    case 64:return '=';
+    case 64:return 21;
       break;
-    case 65:return '++';
+    case 65:return 16;
       break;
-    case 66:return '--';
+    case 66:return 17;
       break;
-    case 67:return '$';
+    case 67:yy_.yytext = yy_.yytext.toLowerCase();          return 11;
       break;
-    case 68:return ';';
+    case 68:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2);     return 51// substr to remove the quotes
       break;
-    case 69:return ',';
+    case 69:return 47
       break;
-    case 70:return '.';
+    case 70:return 46
       break;
-    case 71:return '{';
+    case 71:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2);     return 48;
       break;
-    case 72:return '}';
+    case 72: return 5; 
       break;
-    case 73:return '[';
-      break;
-    case 74:return ']';
-      break;
-    case 75:console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+    case 73:console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
       break;
         }
     }

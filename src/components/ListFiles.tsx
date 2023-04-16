@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { analyzeStore } from "../store/resultStore";
+import { ParserParser } from "../interpreter/analyzer/parser";
 const ListFiles = () => {
 
   // get the store 
@@ -20,7 +21,10 @@ const ListFiles = () => {
 
   // handle execute button
   const handleExecute = () => {
-    console.log(result);
+    let parser:any = new ParserParser()
+    console.log(result)
+    parser.parse(result)
+
   }
   return (
     <div className="bg-gray-900 text-gray-400  flex flex-col">
