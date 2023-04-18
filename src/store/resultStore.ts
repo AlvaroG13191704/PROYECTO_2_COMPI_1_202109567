@@ -5,6 +5,7 @@ interface ResultStore {
   grammar:string;
   error: string;
   updateCurrentCode: (code: string) => void;
+  updateResult: (code: string) => void;
 }
 
 export const analyzeStore = create<ResultStore>((set) => ({
@@ -12,4 +13,5 @@ export const analyzeStore = create<ResultStore>((set) => ({
   grammar:"",
   error: "",
   updateCurrentCode: (code) => set({ grammar: code }),
+  updateResult: (code:string) => set({ result: code }),
 }))   

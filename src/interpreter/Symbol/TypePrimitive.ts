@@ -1,5 +1,5 @@
 export enum TypePrimitive {
-  /*0*/   INTENGER,
+  /*0*/   INTEGER,
   /*1*/   DOUBLE,
   /*2*/   CHAR,
   /*3*/   STRING,

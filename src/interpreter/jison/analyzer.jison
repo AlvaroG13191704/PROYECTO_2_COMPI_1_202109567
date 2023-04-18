@@ -1,5 +1,12 @@
 %{
+  import {Root} from '../Symbol/Root';
+  import {Type} from '../Symbol/Type';
+  import {TypePrimitive} from '../Symbol/TypePrimitive';
   import {VariableDeclaration} from '../Instructions/VariableDeclaration';
+  import {Print} from '../Instructions/Print';
+  import {LiteralValue} from '../Expressions/LiteralValue';
+  import {VariableAccess} from '../Expressions/VariableAccess';
+  import {Arithmetic} from '../Expressions/Arithmetic';
 %}
 /* Lexical Definition */
 %lex
@@ -159,10 +166,9 @@ frac                        (?:\.[0-9]+)
 INIT: SENTENCES EOF
     {
       console.log("Parse de Jison entrada: OK ");
-      let raiz = $1
-      $$ = raiz;
-      console.log($$)
-      return raiz;
+      let root = new Root($1);
+      $$ = root;
+      return root;
     }
     ;
 
@@ -206,11 +212,7 @@ DECLARATION : TYPE id '=' EXP
             }
             | TYPE id 
             {
-              $$ = {
-                type: 'declaration',
-                value: $1,
-                id: $2
-              }
+              $$ = new VariableDeclaration($1, $2, undefined, @2.first_line, @2.first_column);
             }
             | TYPE id '=' '(' TYPE ')' EXP 
             {
@@ -434,14 +436,8 @@ DOWHILE     : t_do SENTENCES_BLOCK t_while '(' EXP ')' ';'
             }
             ;
 
-PRINT     : t_print '(' EXP ')'
-           {
-            $$ = {
-              type: 'print',
-              exp: $3
-            }
-           }
-           ;
+PRINT     : t_print '(' LISTEXP ')' { $$ = new Print($3,@1.first_line, @1.first_column); }
+          ;
 
 CALLBACK  : id '[' EXP ']'
           {
@@ -469,20 +465,20 @@ CALLBACK  : id '[' EXP ']'
           }
           ;
 
-TYPE      : tint     { $$ = $1;}
-          | tdouble  { $$ = $1;}
-          | tboolean { $$ = $1;}
-          | tchar    { $$ = $1;}
-          | tstring  { $$ = $1;}
+TYPE      : tint     { $$ = new Type(TypePrimitive.INTENGER);}
+          | tdouble  { $$ = new Type(TypePrimitive.DOUBLE);}
+          | tboolean { $$ = new Type(TypePrimitive.BOOLEAN);}
+          | tchar    { $$ = new Type(TypePrimitive.CHAR);}
+          | tstring  { $$ = new Type(TypePrimitive.STRING);}
           ;
 
-EXP       : EXP '+' EXP            { $$ = {type: 'add', left: $1, right: $3}; }
-          | EXP '-' EXP            { $$ = {type: 'sub', left: $1, right: $3}; }
-          | EXP '*' EXP            { $$ = {type: 'mul', left: $1, right: $3}; }
-          | EXP '/' EXP            { $$ = {type: 'div', left: $1, right: $3}; }
-          | EXP '^' EXP            { $$ = {type: 'pow', left: $1, right: $3}; }
-          | EXP '%' EXP            { $$ = {type: 'mod', left: $1, right: $3}; }
-          | '-' EXP %prec negative { $$ = {type: 'negative', value: $2}; }
+EXP       : EXP '+' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
+          | EXP '-' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
+          | EXP '*' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
+          | EXP '/' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
+          | EXP '^' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
+          | EXP '%' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
+          | '-' EXP %prec negative { $$ = $2; }
           | '(' EXP ')'            { $$ = $2; }
           | EXP '==' EXP           { $$ = {type: 'eq', left: $1, right: $3}; }
           | EXP '!=' EXP           { $$ = {type: 'neq', left: $1, right: $3}; }
@@ -495,12 +491,12 @@ EXP       : EXP '+' EXP            { $$ = {type: 'add', left: $1, right: $3}; }
           | EXP '?' EXP ':' EXP    { $$ = {type: 'ternary', left: $1, middle: $3, right: $5}; }
           | '!' EXP                { $$ = {type: 'not', exp: $2}; }
           | CALLBACK               { $$ = $1; }
-          | id                     { $$ = $1;}
-          | integer                { $$ = $1;}
-          | float                  { $$ = $1;}
-          | words                  { $$ = $1;}
-          | t_true                 { $$ = $1;}
-          | t_false                { $$ = $1;}
-          | character              { $$ = $1;}
+          | id                     { $$ = new VariableAccess($1,@1.first_line, @1.first_column);}
+          | integer                { $$ = new LiteralValue($1, "integer", @1.first_line, @1.first_column);}
+          | float                  { $$ = new LiteralValue($1, "double", @1.first_line, @1.first_column);}
+          | words                  { $$ = new LiteralValue($1, "string", @1.first_line, @1.first_column);}
+          | character              { $$ = new LiteralValue($1, "char", @1.first_line, @1.first_column);}
+          | t_true                 { $$ = new LiteralValue($1, "true", @1.first_line, @1.first_column);}
+          | t_false                { $$ = new LiteralValue($1, "false", @1.first_line, @1.first_column);}
           ;
 

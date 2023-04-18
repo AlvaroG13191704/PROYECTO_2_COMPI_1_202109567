@@ -15,15 +15,15 @@ export class Variable {
     this.value = value;
   }
 
-  public getValue() {
+  public getValue():any {
     return this.value;
   }
 
-  public getType() {
+  public getType(): Type {
     return this.type;
   }
 
-  public getId() {
+  public getId():string {
     return this.id;
   }
 }

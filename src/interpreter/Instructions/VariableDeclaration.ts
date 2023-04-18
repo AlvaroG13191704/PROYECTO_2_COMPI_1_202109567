@@ -10,9 +10,9 @@ export class VariableDeclaration extends Instruction {
   
   type: Type;
   id: string;
-  exp: Expression
+  exp: Expression | undefined;
 
-  constructor(type: Type, id: string, exp: Expression, line: number, column: number) {
+  constructor(type: Type, id: string, exp: Expression |undefined, line: number, column: number) {
     super(line, column);
     this.type = type;
     this.id = id;
@@ -20,22 +20,26 @@ export class VariableDeclaration extends Instruction {
   }
 
   // execute() to declare a variable 
-  public execute(curent: Enviroment, global: Enviroment, ast: AST) {
+  public execute(current: Enviroment, global: Enviroment, ast: AST) {
     // verify if the variable is already declared
-    console.log(curent.existsVariable(this.id));
-    if(curent.existsVariable(this.id)) {
+    console.log(current.existsVariable(this.id));
+
+    if(current.existsVariable(this.id)) {
       throw new Error("Variable ya se encuentra definida en el entorno actual: " + this.line + " , " + this.column);
     }
 
     let res
     // verify is the type is the same
     if(this.exp != undefined){
-      res = this.exp.getValue(curent, global, ast);
+
+      res = this.exp.getValue(current, global, ast);
+      
+
       if(this.type.type != this.exp.type?.getType()){
         throw new Error("Tipo de variable declarada no es igual al tipo de la expresion: " + this.line + " , " + this.column);
       } 
     }else {
-      if(this.type.getType() === TypePrimitive.INTENGER){
+      if(this.type.getType() === TypePrimitive.INTEGER){
         res = 0;
       }else if(this.type.getType() === TypePrimitive.DOUBLE){
         res = 0.0;
@@ -49,6 +53,6 @@ export class VariableDeclaration extends Instruction {
     }
     // insert variable
     let newVar = new Variable(this.type, this.id, res);
-    curent.insertVariable(this.id, newVar);
+    current.insertVariable(this.id, newVar);
   }
 }

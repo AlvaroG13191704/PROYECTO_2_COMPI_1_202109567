@@ -36,10 +36,8 @@ export class Analyzer {
 
     let tree: AST;
     try {
-      // array of nodes
-      let root: Root = parser.parser(this.entry);
+      let root: Root = parser.parse(this.entry);
       tree = new AST(root);
-
       // execute the tree
       console.log(tree);
       tree.execute();

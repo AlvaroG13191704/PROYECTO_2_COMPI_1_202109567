@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { analyzeStore } from "../store/resultStore";
 import { ParserParser } from "../interpreter/analyzer/parser";
+import { Analyzer } from "../interpreter/analyzer/Analyzer";
+import { AST } from "../interpreter/Symbol/AST";
 const ListFiles = () => {
 
   // get the store 
-  const result = analyzeStore((state) => state.grammar);
+  const grammar = analyzeStore((state) => state.grammar);
+  const { updateResult } = analyzeStore();
 
   const [files, setFiles] = useState([
     { id: 1, name: "archivoPrueba.tw", active: true },
@@ -21,10 +24,18 @@ const ListFiles = () => {
 
   // handle execute button
   const handleExecute = () => {
-    let parser:any = new ParserParser()
-    console.log(result)
-    parser.parse(result)
+    // let parser:any = new ParserParser()
+    // console.log(result)
+    // parser.parse(result)
 
+    let analyzer = new Analyzer(grammar,"editor");
+    let ast: AST = analyzer.Analyze();
+
+    if(ast != undefined){
+      const re = ast.getOutput()
+      updateResult(re)
+      
+    }
   }
   return (
     <div className="bg-gray-900 text-gray-400  flex flex-col">
