@@ -1,4 +1,6 @@
-
+%{
+  import {VariableDeclaration} from '../Instructions/VariableDeclaration';
+%}
 /* Lexical Definition */
 %lex
 
@@ -87,12 +89,12 @@ frac                        (?:\.[0-9]+)
 "^"                             {return '^';}
 "%"                             {return '%';}
 /* relational operators */
+"<="                            {return '<=';}
+">="                            {return '>=';}
 "=="                            {return '==';}
 "!="                            {return '!=';}
 "<"                             {return '<';}
-"<="                            {return '<=';}
 ">"                             {return '>';}
-">="                            {return '>=';}
 "?"                             {return '?';}
 ":"                             {return ':';} // ternary operator or any other use
 /* logical operators */
@@ -137,8 +139,8 @@ frac                        (?:\.[0-9]+)
 // Operaciones logicas y relacionales
 %left '&&'
 %left '||'
-%left '!=' '==' '==='
-%left '>' '<' '<=' '>=' 
+%left '!=' '==' 
+%left '>=', '<=', '<', '>'
 %right '!' '('
 
 // Operaciones numericas
@@ -179,20 +181,35 @@ SENTENCES : SENTENCES SENTENCE
 
 SENTENCE : DECLARATION ';' { $$ = $1; }
          | ASSIGNMENT  ';' { $$ = $1; }
-         | error      ';' 
-          {
-            console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this.$.first_line + ', en la columna: ' + this.$.first_column);
-            $$ = null;
-          }
+         | CALLBACK    ';' { $$ = $1; }
+         | IF              { $$ = $1; }
+         | SWITCH          { $$ = $1; }
+         | WHILE           { $$ = $1; }
+         | FOR             { $$ = $1; }
+         | DOWHILE         { $$ = $1; }
+         | PRINT       ';' { $$ = $1; }
          ;
 
+SENTENCES_BLOCK : '{' SENTENCES '}'
+                {
+                  $$ = $2;
+                }
+                | '{' '}'
+                {
+                  $$ = [];
+                }
+                ;
+
 DECLARATION : TYPE id '=' EXP
+            {
+              $$ = new VariableDeclaration($1, $2, $4, @2.first_line, @2.first_column);
+            }
+            | TYPE id 
             {
               $$ = {
                 type: 'declaration',
                 value: $1,
-                id: $2,
-                exp: $4
+                id: $2
               }
             }
             | TYPE id '=' '(' TYPE ')' EXP 
@@ -203,14 +220,6 @@ DECLARATION : TYPE id '=' EXP
                 id: $2,
                 type_cast: $5,
                 exp: $7
-              }
-            }
-            | TYPE id 
-            {
-              $$ = {
-                type: 'declaration',
-                value: $1,
-                id: $2
               }
             }
             | TYPE'['']' id '=' t_new TYPE'[' EXP ']' 
@@ -261,6 +270,24 @@ ASSIGNMENT : id '=' EXP
                 exp: $3
               }
             }
+           | id '[' EXP ']' '=' EXP
+           {
+            $$ = {
+              type: 'assignment vector',
+              id: $1,
+              exp: $3,
+              exp2: $6
+            }
+           }
+           | id '[''[' EXP ']'']' '=' EXP
+           {
+            $$ = {
+              type: 'assignment list',
+              id: $1,
+              exp: $4,
+              exp2: $8
+            }
+           }
            | id '+''+'
            {
             $$ = {
@@ -276,6 +303,171 @@ ASSIGNMENT : id '=' EXP
             }
            }
            ;
+
+// CONDITIONAL
+IF         : t_if '(' EXP ')' SENTENCES_BLOCK
+           {
+            $$ = {
+              type: 'if',
+              exp: $3,
+              sentences: $5
+            }
+           }
+           | t_if '(' EXP ')' SENTENCES_BLOCK ELSE
+           {
+            $$ = {
+              type: 'if else',
+              exp: $3,
+              sentences: $5,
+              sentences_else: $6
+            }
+           }
+           ;
+
+ELSE      : t_else IF
+          {
+            let else_sentence = [];
+            else_sentence.push($2);
+            $$ = else_sentence;
+          }
+          | t_else SENTENCES_BLOCK
+          {
+            $$ = $2;
+          }
+          ;
+
+SWITCH     : t_switch '(' EXP ')' '{' CASES t_default ':' STATEMENTS '}'
+            {
+              $$ = {
+                type: 'switch',
+                exp: $3,
+                cases: $6,
+                statements: $9
+              }
+            }
+           ;
+
+CASES      : CASES t_case EXP ':' STATEMENTS
+           {
+            $1.push({
+              exp: $3,
+              statements: $5
+            });
+            $$ = $1;
+           }
+           | t_case EXP ':' STATEMENTS
+           {
+            let arrcases = [];
+            arrcases.push({
+              exp: $2,
+              statements: $4
+            });
+            $$ = arrcases;
+           }
+           ;
+
+STATEMENTS : STATEMENTS STATEMENT
+            {
+              $1.push($2);
+              $$ = $1;
+            }
+            | STATEMENT
+            {
+              let arrstatements = [];
+              arrstatements.push($1);
+              $$ = arrstatements;
+            }
+            ;
+
+STATEMENT   : t_break ';'
+            {
+              $$ = {
+                type: 'break'
+              }
+            }
+            | SENTENCE
+            {
+              $$ = $1;
+            }
+            ;
+
+// LOOPS
+WHILE       : t_while '(' EXP ')' SENTENCES_BLOCK
+            {
+              $$ = {
+                type: 'while',
+                exp: $3,
+                sentences: $5
+              }
+            }
+            ;
+
+FOR         : t_for '(' DECLARATION ';' EXP ';' ASSIGNMENT ')' SENTENCES_BLOCK
+            {
+              $$ = {
+                type: 'for',
+                declaration: $3,
+                exp: $5,
+                update: $7,
+                sentences: $9
+              }
+            }
+            | t_for '(' ASSIGNMENT ';' EXP ';' ASSIGNMENT ')' SENTENCES_BLOCK
+            {
+              $$ = {
+                type: 'for',
+                assigment: $3,
+                exp: $5,
+                update: $7,
+                sentences: $9
+              }
+            }
+            ;
+
+DOWHILE     : t_do SENTENCES_BLOCK t_while '(' EXP ')' ';'
+            {
+              $$ = {
+                type: 'do while',
+                sentences: $2,
+                exp: $5
+              }
+            }
+            ;
+
+PRINT     : t_print '(' EXP ')'
+           {
+            $$ = {
+              type: 'print',
+              exp: $3
+            }
+           }
+           ;
+
+CALLBACK  : id '[' EXP ']'
+          {
+            $$ = {
+              type: 'access vector',
+              id: $1,
+              exp: $3
+            }
+          }
+          | id '[''[' EXP ']'']'
+          {
+            $$ = {
+              type: 'access list',
+              id: $1,
+              exp: $4
+            }
+          }
+          | id '.' t_add '(' EXP ')'
+          {
+            $$ = {
+              type: 'add list',
+              id: $1,
+              exp: $5
+            }
+          }
+          ;
 
 TYPE      : tint     { $$ = $1;}
           | tdouble  { $$ = $1;}
@@ -294,14 +486,15 @@ EXP       : EXP '+' EXP            { $$ = {type: 'add', left: $1, right: $3}; }
           | '(' EXP ')'            { $$ = $2; }
           | EXP '==' EXP           { $$ = {type: 'eq', left: $1, right: $3}; }
           | EXP '!=' EXP           { $$ = {type: 'neq', left: $1, right: $3}; }
-          | EXP '<' EXP            { $$ = {type: 'lt', left: $1, right: $3}; }
-          | EXP '>' EXP            { $$ = {type: 'gt', left: $1, right: $3}; }
           | EXP '<=' EXP           { $$ = {type: 'lte', left: $1, right: $3}; }
           | EXP '>=' EXP           { $$ = {type: 'gte', left: $1, right: $3}; }
+          | EXP '<' EXP            { $$ = {type: 'lt', left: $1, right: $3}; }
+          | EXP '>' EXP            { $$ = {type: 'gt', left: $1, right: $3}; }
           | EXP '&&' EXP           { $$ = {type: 'and', left: $1, right: $3}; }
           | EXP '||' EXP           { $$ = {type: 'or', left: $1, right: $3}; }
           | EXP '?' EXP ':' EXP    { $$ = {type: 'ternary', left: $1, middle: $3, right: $5}; }
           | '!' EXP                { $$ = {type: 'not', exp: $2}; }
+          | CALLBACK               { $$ = $1; }
           | id                     { $$ = $1;}
           | integer                { $$ = $1;}
           | float                  { $$ = $1;}

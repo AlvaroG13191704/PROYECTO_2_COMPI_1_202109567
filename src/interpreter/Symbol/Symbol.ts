@@ -8,8 +8,8 @@ export class Symbol {
   public type: Type;
 
   constructor(id: string, value: any, type: Type) {
-    this.id = id;
-    this.value = value;
-    this.type = type;
+    this.id = id;        // "valueID"
+    this.value = value;  // string 
+    this.type = type;   // Type.STRING
   }
 }

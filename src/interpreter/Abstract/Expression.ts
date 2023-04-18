@@ -1,18 +1,16 @@
+import { AST } from "../Symbol/AST";
 import { Enviroment } from "../Symbol/Enviroment";
-import { Return } from "./Return";
+import { Node } from "../Symbol/Node";
+import { Type } from "../Symbol/Type";
 
+export abstract class Expression extends Node {
+  public type: Type | undefined;
 
-export abstract class Expression {
-
-  public line: number;
-  public column: number;
-
-  constructor(line : number, column : number) {
-    this.line = line;
-    this.column = column;
+  constructor(line: number, column: number) {
+    super(line, column);
+    this.type = undefined ;
   }
 
-  public abstract execute(enviroment: Enviroment) : Return;
-
-
+  // any Expression return a value
+  public abstract getValue(current: Enviroment, global: Enviroment, ast: AST): any;
 }

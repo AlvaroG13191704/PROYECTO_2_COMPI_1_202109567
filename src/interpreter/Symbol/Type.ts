@@ -1,15 +1,14 @@
+import { TypePrimitive } from "./TypePrimitive";
 
 
-export enum Type {
-  NUMBER,
-  DECIMAL,
-  CHAR,
-  STRING,
-  BOOLEAN,
-  NULL,
-  ERROR,
-  NEGATIVE,
-  INCREASE,
-  DECREASE,
-  ARRAY
+export class Type {
+  type: TypePrimitive;
+
+  constructor(type: TypePrimitive) {
+    this.type = type;
+  }
+
+  getType(): TypePrimitive {
+    return this.type;
+  }
 }
