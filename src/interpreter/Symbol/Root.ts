@@ -30,7 +30,7 @@ export class Root {
         let sent = this.sentences[x];
         // extra code to execute the sentences that we want
         if(!(sent instanceof VariableDeclaration) && !(sent instanceof FunctionDeclaration)){
-          if(sent instanceof Instruction || sent instanceof Print) {
+          if(sent instanceof Instruction ) {
             sent.execute(current_env, global_env, ast)
           }else if(sent instanceof Expression){
             sent.getValue(current_env, global_env, ast);

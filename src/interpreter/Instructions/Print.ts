@@ -16,7 +16,6 @@ export class Print extends Instruction {
 
     if(this.list_exp.length === 1){
       let exp: Expression = this.list_exp[0];
-      console.log(exp);
       let value = exp.getValue(current, global, ast);
       // verify the type of the value
       if(exp.type?.getType() === 0 || exp.type?.getType() === 1 || exp.type?.getType() === 2 || exp.type?.getType() === 3 || exp.type?.getType() === 4 ){

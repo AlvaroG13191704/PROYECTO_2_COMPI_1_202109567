@@ -35,11 +35,9 @@ export class Arithmetic extends Expression {
     let prim1: TypePrimitive = typ1.getType();
     let prim2: TypePrimitive = typ2.getType();
 
-    console.log(prim1);
-    console.log(prim2);
-
     // INTEGER
     if(prim1 === TypePrimitive.INTEGER && prim2 === TypePrimitive.INTEGER){
+      this.type = new Type(TypePrimitive.INTEGER);
       return val1 + val2;
     }
   }

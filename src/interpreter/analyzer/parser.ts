@@ -331,7 +331,7 @@ case 46:
           
 break;
 case 47:
- this.$ = new Type(TypePrimitive.INTENGER);
+ this.$ = new Type(TypePrimitive.INTEGER);
 break;
 case 48:
  this.$ = new Type(TypePrimitive.DOUBLE);

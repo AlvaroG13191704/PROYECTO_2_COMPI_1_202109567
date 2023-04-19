@@ -465,7 +465,7 @@ CALLBACK  : id '[' EXP ']'
           }
           ;
 
-TYPE      : tint     { $$ = new Type(TypePrimitive.INTENGER);}
+TYPE      : tint     { $$ = new Type(TypePrimitive.INTEGER);}
           | tdouble  { $$ = new Type(TypePrimitive.DOUBLE);}
           | tboolean { $$ = new Type(TypePrimitive.BOOLEAN);}
           | tchar    { $$ = new Type(TypePrimitive.CHAR);}
