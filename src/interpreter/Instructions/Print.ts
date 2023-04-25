@@ -1,33 +1,45 @@
+import { Errors } from "../AST/Errors";
+import { Node } from "../AST/Node";
 import { Expression } from "../Abstract/Expression";
 import { Instruction } from "../Abstract/Instruction";
-import { AST } from "../Symbol/AST";
-import { Enviroment } from "../Symbol/Enviroment";
+import { Controller } from "../Controller";
+import { TableSymbol } from "../TableSymbols/TableSymbol";
+import { type } from "../TableSymbols/Type";
 
-export class Print extends Instruction {
+export class Print implements Instruction {
 
-  list_exp : Expression[];
+  public expression: Expression;
+  public line: number;
+  public column: number;
 
-  constructor(list_exp : Expression[], line : number, column : number) {
-    super(line, column);
-    this.list_exp = list_exp;
+  constructor(expression: Expression, line: number, column: number) {
+    this.expression = expression;
+    this.line = line;
+    this.column = column;
   }
 
-  public execute(current: Enviroment, global: Enviroment, ast: AST) {
+  execute(controller: Controller, ts: TableSymbol) {
+    
+    let typeValue = this.expression.getType(controller, ts);
 
-    if(this.list_exp.length === 1){
-      let exp: Expression = this.list_exp[0];
-      let value = exp.getValue(current, global, ast);
-      // verify the type of the value
-      if(exp.type?.getType() === 0 || exp.type?.getType() === 1 || exp.type?.getType() === 2 || exp.type?.getType() === 3 || exp.type?.getType() === 4 ){
-        ast.writeConsole(value.toString());
-      }else {
-        // throw error
-        throw new Error("La variable que se desea imprimir debe de ser de tipo enteros, dobles, booleanos o caracteres " + this.line + " , " + this.column );
-      }
+    if(typeValue === type.INTEGER || typeValue === type.DOUBLE || typeValue === type.STRING || typeValue === type.BOOLEAN || typeValue === type.CHAR){
+      let value = this.expression.getValue(controller, ts);
+      controller.append(value);
     }else {
-      // error
-      throw new Error("La funcion print solo recibe un parametro " + this.line + " , " + this.column );
+      let error = new Errors("Semantico", `No se puede imprimir una expresion de tipo ${typeValue}`, this.line, this.column);
+      controller.errors.push(error);
+      // send to the console
+      controller.append(`Error Semantico: No se puede imprimir una expresion de tipo ${typeValue} en la linea ${this.line} y columna ${this.column}`);
     }
+  }
 
+  // example: print(x);
+  // create node
+  goOver(): Node {
+    let father = new Node("Print", "");
+    let expression = new Node("Expression", "");
+    expression.addChild(this.expression.goOver());
+    father.addChild(expression);
+    return father;
   }
 }

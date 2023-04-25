@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tjison": "ts-jison -t typescript -n Parser -n Parser -o src/interpreter/analyzer/parser.ts src/interpreter/jison/analyzer.jison"
+    "tjison": "ts-jison -t typescript -n Analyzer -n Analyzer -o src/interpreter/Analyzer/parser.ts src/interpreter/Analyzer/analyzer.jison"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",

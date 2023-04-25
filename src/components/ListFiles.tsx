@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { analyzeStore } from "../store/resultStore";
-import { ParserParser } from "../interpreter/analyzer/parser";
-import { Analyzer } from "../interpreter/analyzer/Analyzer";
-import { AST } from "../interpreter/Symbol/AST";
+import { AnalyzerParser } from "../interpreter/Analyzer/parser";
+import { AST } from "../interpreter/AST/AST";
+import { Node } from "../interpreter/AST/Node";
+import { Controller } from "../interpreter/Controller";
+import { TableSymbol } from "../interpreter/TableSymbols/TableSymbol";
 const ListFiles = () => {
 
   // get the store 
@@ -24,18 +26,25 @@ const ListFiles = () => {
 
   // handle execute button
   const handleExecute = () => {
-    // let parser:any = new ParserParser()
-    // console.log(result)
-    // parser.parse(result)
+    // generate the graphviz
+    let parser:any = new AnalyzerParser()
+    let result: AST = parser.parse(grammar)
+    let node_root: Node = result.goOver();
+    let graph = node_root.graphTree();
+    // console.log(graph)
+    // get response
+    let controller = new Controller();
+    let ts_global = new TableSymbol(null);
 
-    let analyzer = new Analyzer(grammar,"editor");
-    let ast: AST = analyzer.Analyze();
-
-    if(ast != undefined){
-      const re = ast.getOutput()
-      updateResult(re)
-      
+    result.execute(controller, ts_global);
+    console.log(controller.console);
+    console.log(result)
+    console.log(ts_global)
+    // update the result
+    if(controller.console.length > 0){
+      updateResult(controller.console)
     }
+    
   }
   return (
     <div className="bg-gray-900 text-gray-400  flex flex-col">

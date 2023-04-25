@@ -1,16 +1,21 @@
-import { AST } from "../Symbol/AST";
-import { Enviroment } from "../Symbol/Enviroment";
-import { Node } from "../Symbol/Node";
-import { Type } from "../Symbol/Type";
+import { Node } from "../AST/Node";
+import { Controller } from "../Controller";
+import { TableSymbol } from "../TableSymbols/TableSymbol";
+import { type } from "../TableSymbols/Type";
 
-export abstract class Expression extends Node {
-  public type: Type | undefined;
 
-  constructor(line: number, column: number) {
-    super(line, column);
-    this.type = undefined ;
-  }
+export interface Expression {
 
-  // any Expression return a value
-  public abstract getValue(current: Enviroment, global: Enviroment, ast: AST): any;
+  // this method return the type of the value of the expression
+  // controller -> control errors, prints of the interpreter
+  // ts -> table of symbols
+  getType(controller: Controller, ts: TableSymbol): type;
+
+  // this method return the value of the expression
+  // controller -> control errors, prints of the interpreter
+  // ts -> table of symbols
+  getValue(controller: Controller, ts: TableSymbol): any;
+
+  // this methos go over the the sub tree of the expression
+  goOver(): Node;
 }

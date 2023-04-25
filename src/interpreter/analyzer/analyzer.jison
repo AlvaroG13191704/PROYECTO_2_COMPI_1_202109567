@@ -1,13 +1,3 @@
-%{
-  import {Root} from '../Symbol/Root';
-  import {Type} from '../Symbol/Type';
-  import {TypePrimitive} from '../Symbol/TypePrimitive';
-  import {VariableDeclaration} from '../Instructions/VariableDeclaration';
-  import {Print} from '../Instructions/Print';
-  import {LiteralValue} from '../Expressions/LiteralValue';
-  import {VariableAccess} from '../Expressions/VariableAccess';
-  import {Arithmetic} from '../Expressions/Arithmetic';
-%}
 /* Lexical Definition */
 %lex
 
@@ -139,6 +129,17 @@ frac                        (?:\.[0-9]+)
 
 /lex
 
+%{
+  import { AST } from '../AST/AST';
+  import { Type } from '../TableSymbols/Type';
+  // INSTRUCTIONS
+  import { VariableDeclaration } from '../Instructions/Declaration';
+  import { Assigment } from '../Instructions/Assigment';
+  import { Print } from '../Instructions/Print';
+  // EXPRESSIONS
+  import { Identifier } from '../Expressions/Identifier';
+  import { Primitive } from '../Expressions/Primitive';
+%}
 /* =================== ASSOCIATION AND PRECEDENCE OF OPERATORS =================== */
 // Incremento y decremento
 %left '++' '--'
@@ -165,10 +166,9 @@ frac                        (?:\.[0-9]+)
 
 INIT: SENTENCES EOF
     {
-      console.log("Parse de Jison entrada: OK ");
-      let root = new Root($1);
+      let root = new AST($1);
       $$ = root;
-      return root;
+      return $$;
     }
     ;
 
@@ -187,12 +187,6 @@ SENTENCES : SENTENCES SENTENCE
 
 SENTENCE : DECLARATION ';' { $$ = $1; }
          | ASSIGNMENT  ';' { $$ = $1; }
-         | CALLBACK    ';' { $$ = $1; }
-         | IF              { $$ = $1; }
-         | SWITCH          { $$ = $1; }
-         | WHILE           { $$ = $1; }
-         | FOR             { $$ = $1; }
-         | DOWHILE         { $$ = $1; }
          | PRINT       ';' { $$ = $1; }
          ;
 
@@ -208,11 +202,11 @@ SENTENCES_BLOCK : '{' SENTENCES '}'
 
 DECLARATION : TYPE id '=' EXP
             {
-              $$ = new VariableDeclaration($1, $2, $4, @2.first_line, @2.first_column);
+              $$ = new VariableDeclaration($1, $2, $4, @1.first_line, @1.first_column);
             }
             | TYPE id 
             {
-              $$ = new VariableDeclaration($1, $2, undefined, @2.first_line, @2.first_column);
+              $$ = new VariableDeclaration($1, $2, null, @1.first_line, @1.first_column);
             }
             | TYPE id '=' '(' TYPE ')' EXP 
             {
@@ -222,31 +216,6 @@ DECLARATION : TYPE id '=' EXP
                 id: $2,
                 type_cast: $5,
                 exp: $7
-              }
-            }
-            | TYPE'['']' id '=' t_new TYPE'[' EXP ']' 
-            {
-              $$ = {
-                type: 'declaration vector 1',
-                type_: $1,
-                id: $4,
-                exp: $9,
-              }
-            }
-            | TYPE'['']' id '=' '{' LISTEXP '}' 
-            {
-              $$ = {
-                type: 'declaration vector 2',
-                id: $4,
-                exps: $7
-              }
-            }
-            | t_list '<' TYPE '>' id '=' t_new t_list '<' TYPE '>'
-            {
-              $$ = {
-                type: 'declaration list ',
-                type_: $3,
-                id: $5,
               }
             }
             ;
@@ -266,218 +235,36 @@ LISTEXP    : LISTEXP ',' EXP
 
 ASSIGNMENT : id '=' EXP 
             {
-              $$ = {
-                type: 'assignment',
-                id: $1,
-                exp: $3
-              }
+              $$ = new Assigment($1, $3, @1.first_line, @1.first_column);
             }
-           | id '[' EXP ']' '=' EXP
-           {
-            $$ = {
-              type: 'assignment vector',
-              id: $1,
-              exp: $3,
-              exp2: $6
-            }
-           }
-           | id '[''[' EXP ']'']' '=' EXP
-           {
-            $$ = {
-              type: 'assignment list',
-              id: $1,
-              exp: $4,
-              exp2: $8
-            }
-           }
-           | id '+''+'
-           {
-            $$ = {
-              type: 'increment',
-              id: $1
-            }
-           }
-           | id '-''-'
-           {
-            $$ = {
-              type: 'decrement',
-              id: $1
-            }
-           }
            ;
 
-// CONDITIONAL
-IF         : t_if '(' EXP ')' SENTENCES_BLOCK
-           {
-            $$ = {
-              type: 'if',
-              exp: $3,
-              sentences: $5
-            }
-           }
-           | t_if '(' EXP ')' SENTENCES_BLOCK ELSE
-           {
-            $$ = {
-              type: 'if else',
-              exp: $3,
-              sentences: $5,
-              sentences_else: $6
-            }
-           }
-           ;
-
-ELSE      : t_else IF
-          {
-            let else_sentence = [];
-            else_sentence.push($2);
-            $$ = else_sentence;
-          }
-          | t_else SENTENCES_BLOCK
-          {
-            $$ = $2;
-          }
+PRINT     : t_print '(' EXP ')' { $$ = new Print($3,@1.first_line, @1.first_column); }
           ;
 
-SWITCH     : t_switch '(' EXP ')' '{' CASES t_default ':' STATEMENTS '}'
-            {
-              $$ = {
-                type: 'switch',
-                exp: $3,
-                cases: $6,
-                statements: $9
-              }
-            }
-           ;
-
-CASES      : CASES t_case EXP ':' STATEMENTS
-           {
-            $1.push({
-              exp: $3,
-              statements: $5
-            });
-            $$ = $1;
-           }
-           | t_case EXP ':' STATEMENTS
-           {
-            let arrcases = [];
-            arrcases.push({
-              exp: $2,
-              statements: $4
-            });
-            $$ = arrcases;
-           }
-           ;
-
-STATEMENTS : STATEMENTS STATEMENT
-            {
-              $1.push($2);
-              $$ = $1;
-            }
-            | STATEMENT
-            {
-              let arrstatements = [];
-              arrstatements.push($1);
-              $$ = arrstatements;
-            }
-            ;
-
-STATEMENT   : t_break ';'
-            {
-              $$ = {
-                type: 'break'
-              }
-            }
-            | SENTENCE
-            {
-              $$ = $1;
-            }
-            ;
-
-// LOOPS
-WHILE       : t_while '(' EXP ')' SENTENCES_BLOCK
-            {
-              $$ = {
-                type: 'while',
-                exp: $3,
-                sentences: $5
-              }
-            }
-            ;
-
-FOR         : t_for '(' DECLARATION ';' EXP ';' ASSIGNMENT ')' SENTENCES_BLOCK
-            {
-              $$ = {
-                type: 'for',
-                declaration: $3,
-                exp: $5,
-                update: $7,
-                sentences: $9
-              }
-            }
-            | t_for '(' ASSIGNMENT ';' EXP ';' ASSIGNMENT ')' SENTENCES_BLOCK
-            {
-              $$ = {
-                type: 'for',
-                assigment: $3,
-                exp: $5,
-                update: $7,
-                sentences: $9
-              }
-            }
-            ;
-
-DOWHILE     : t_do SENTENCES_BLOCK t_while '(' EXP ')' ';'
-            {
-              $$ = {
-                type: 'do while',
-                sentences: $2,
-                exp: $5
-              }
-            }
-            ;
-
-PRINT     : t_print '(' LISTEXP ')' { $$ = new Print($3,@1.first_line, @1.first_column); }
-          ;
-
-CALLBACK  : id '[' EXP ']'
+CALLBACK  : id '('')'
           {
             $$ = {
-              type: 'access vector',
+              type: 'callback void',
               id: $1,
               exp: $3
             }
           }
-          | id '[''[' EXP ']'']'
-          {
-            $$ = {
-              type: 'access list',
-              id: $1,
-              exp: $4
-            }
-          }
-          | id '.' t_add '(' EXP ')'
-          {
-            $$ = {
-              type: 'add list',
-              id: $1,
-              exp: $5
-            }
-          }
           ;
 
-TYPE      : tint     { $$ = new Type(TypePrimitive.INTEGER);}
-          | tdouble  { $$ = new Type(TypePrimitive.DOUBLE);}
-          | tboolean { $$ = new Type(TypePrimitive.BOOLEAN);}
-          | tchar    { $$ = new Type(TypePrimitive.CHAR);}
-          | tstring  { $$ = new Type(TypePrimitive.STRING);}
+TYPE      : tint     { $$ = new Type("INTEGER");}
+          | tdouble  { $$ = new Type("DOUBLE");}
+          | tboolean { $$ = new Type("BOOLEAN");}
+          | tchar    { $$ = new Type("CHAR");}
+          | tstring  { $$ = new Type("STRING");}
           ;
 
-EXP       : EXP '+' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
-          | EXP '-' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
-          | EXP '*' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
-          | EXP '/' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
-          | EXP '^' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
-          | EXP '%' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_line, @2.first_column); }
+EXP       : EXP '+' EXP            { $$ = ""; }
+          | EXP '-' EXP            { $$ = ""; }
+          | EXP '*' EXP            { $$ = ""; }
+          | EXP '/' EXP            { $$ = ""; }
+          | EXP '^' EXP            { $$ = ""; }
+          | EXP '%' EXP            { $$ = ""; }
           | '-' EXP %prec negative { $$ = $2; }
           | '(' EXP ')'            { $$ = $2; }
           | EXP '==' EXP           { $$ = {type: 'eq', left: $1, right: $3}; }
@@ -491,12 +278,11 @@ EXP       : EXP '+' EXP            { $$ = new Arithmetic($1, $3, $2, @2.first_li
           | EXP '?' EXP ':' EXP    { $$ = {type: 'ternary', left: $1, middle: $3, right: $5}; }
           | '!' EXP                { $$ = {type: 'not', exp: $2}; }
           | CALLBACK               { $$ = $1; }
-          | id                     { $$ = new VariableAccess($1,@1.first_line, @1.first_column);}
-          | integer                { $$ = new LiteralValue($1, "integer", @1.first_line, @1.first_column);}
-          | float                  { $$ = new LiteralValue($1, "double", @1.first_line, @1.first_column);}
-          | words                  { $$ = new LiteralValue($1, "string", @1.first_line, @1.first_column);}
-          | character              { $$ = new LiteralValue($1, "char", @1.first_line, @1.first_column);}
-          | t_true                 { $$ = new LiteralValue($1, "true", @1.first_line, @1.first_column);}
-          | t_false                { $$ = new LiteralValue($1, "false", @1.first_line, @1.first_column);}
+          | id                     { $$ = new Identifier($1,@1.first_line, @1.first_column);}
+          | integer                { $$ = new Primitive($1, "INTEGER", @1.first_line, @1.first_column);}
+          | float                  { $$ = new Primitive($1, "DOUBLE", @1.first_line, @1.first_column);}
+          | words                  { $$ = new Primitive($1, "STRING", @1.first_line, @1.first_column);}
+          | character              { $$ = new Primitive($1, "CHAR", @1.first_line, @1.first_column);}
+          | t_true                 { $$ = new Primitive($1, "BOOLEAN", @1.first_line, @1.first_column);}
+          | t_false                { $$ = new Primitive($1, "BOOLEAN", @1.first_line, @1.first_column);}
           ;
-
