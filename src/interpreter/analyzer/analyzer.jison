@@ -139,6 +139,8 @@ frac                        (?:\.[0-9]+)
   // EXPRESSIONS
   import { Identifier } from '../Expressions/Identifier';
   import { Primitive } from '../Expressions/Primitive';
+  import { TernaryOperator } from '../Expressions/TernaryOperator';
+  import { Arithmetic } from '../Expressions/Operations/Arithmetic';
 %}
 /* =================== ASSOCIATION AND PRECEDENCE OF OPERATORS =================== */
 // Incremento y decremento
@@ -259,13 +261,13 @@ TYPE      : tint     { $$ = new Type("INTEGER");}
           | tstring  { $$ = new Type("STRING");}
           ;
 
-EXP       : EXP '+' EXP            { $$ = ""; }
-          | EXP '-' EXP            { $$ = ""; }
-          | EXP '*' EXP            { $$ = ""; }
-          | EXP '/' EXP            { $$ = ""; }
-          | EXP '^' EXP            { $$ = ""; }
-          | EXP '%' EXP            { $$ = ""; }
-          | '-' EXP %prec negative { $$ = $2; }
+EXP       : EXP '+' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"+"); }
+          | EXP '-' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"-"); }
+          | EXP '*' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"*"); }
+          | EXP '/' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"/");}
+          | EXP '^' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"^"); }
+          | EXP '%' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"%"); }
+          | '-' EXP %prec negative { $$ = new Arithmetic($2,null,true,@1.first_line, @1.first_column,"UNARY"); }
           | '(' EXP ')'            { $$ = $2; }
           | EXP '==' EXP           { $$ = {type: 'eq', left: $1, right: $3}; }
           | EXP '!=' EXP           { $$ = {type: 'neq', left: $1, right: $3}; }
@@ -275,7 +277,7 @@ EXP       : EXP '+' EXP            { $$ = ""; }
           | EXP '>' EXP            { $$ = {type: 'gt', left: $1, right: $3}; }
           | EXP '&&' EXP           { $$ = {type: 'and', left: $1, right: $3}; }
           | EXP '||' EXP           { $$ = {type: 'or', left: $1, right: $3}; }
-          | EXP '?' EXP ':' EXP    { $$ = {type: 'ternary', left: $1, middle: $3, right: $5}; }
+          | EXP '?' EXP ':' EXP    { $$ = new TernaryOperator($1,$3,$5,@1.first_line, @1.first_column); }
           | '!' EXP                { $$ = {type: 'not', exp: $2}; }
           | CALLBACK               { $$ = $1; }
           | id                     { $$ = new Identifier($1,@1.first_line, @1.first_column);}
@@ -283,6 +285,6 @@ EXP       : EXP '+' EXP            { $$ = ""; }
           | float                  { $$ = new Primitive($1, "DOUBLE", @1.first_line, @1.first_column);}
           | words                  { $$ = new Primitive($1, "STRING", @1.first_line, @1.first_column);}
           | character              { $$ = new Primitive($1, "CHAR", @1.first_line, @1.first_column);}
-          | t_true                 { $$ = new Primitive($1, "BOOLEAN", @1.first_line, @1.first_column);}
-          | t_false                { $$ = new Primitive($1, "BOOLEAN", @1.first_line, @1.first_column);}
+          | t_true                 { $$ = new Primitive(true, "BOOLEAN", @1.first_line, @1.first_column);}
+          | t_false                { $$ = new Primitive(false, "BOOLEAN", @1.first_line, @1.first_column);}
           ;

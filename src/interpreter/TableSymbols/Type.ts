@@ -8,6 +8,7 @@ export enum type {
   CHAR,
   STRING,
   ERROR,
+  UNARY,
   VOID
 }
 

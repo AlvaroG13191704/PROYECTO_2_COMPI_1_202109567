@@ -12,6 +12,8 @@
   // EXPRESSIONS
   import { Identifier } from '../Expressions/Identifier';
   import { Primitive } from '../Expressions/Primitive';
+  import { TernaryOperator } from '../Expressions/TernaryOperator';
+  import { Arithmetic } from '../Expressions/Operations/Arithmetic';
 
 import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, ProductionsType, o } from '@ts-jison/parser';const $V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,11],$V4=[1,12],$V5=[1,13],$V6=[1,14],$V7=[5,15,22,24,25,26,27,28],$V8=[15,19],$V9=[1,29],$Va=[1,26],$Vb=[1,25],$Vc=[1,27],$Vd=[1,30],$Ve=[1,31],$Vf=[1,32],$Vg=[1,33],$Vh=[1,34],$Vi=[1,35],$Vj=[1,39],$Vk=[1,40],$Vl=[1,41],$Vm=[1,42],$Vn=[1,43],$Vo=[1,44],$Vp=[1,45],$Vq=[1,46],$Vr=[1,47],$Vs=[1,48],$Vt=[1,49],$Vu=[1,50],$Vv=[1,51],$Vw=[1,52],$Vx=[1,53],$Vy=[8,19,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44],$Vz=[8,19,35,36,37,38,39,40,41,42,44],$VA=[8,19,29,30,31,32,33,34,35,36,37,38,39,40,41,42,44],$VB=[8,19,31,32,33,34,35,36,37,38,39,40,41,42,44],$VC=[8,19,35,36,41,42,44];
 
@@ -131,11 +133,26 @@ break;
 case 21:
  this.$ = new Type("STRING");
 break;
-case 22: case 23: case 24: case 25: case 26: case 27:
- this.$ = ""; 
+case 22:
+ this.$ = new Arithmetic($$[$0-2],$$[$0],false,_$[$0-2].first_line, _$[$0-2].first_column,"+"); 
 break;
-case 28: case 40:
- this.$ = $$[$0]; 
+case 23:
+ this.$ = new Arithmetic($$[$0-2],$$[$0],false,_$[$0-2].first_line, _$[$0-2].first_column,"-"); 
+break;
+case 24:
+ this.$ = new Arithmetic($$[$0-2],$$[$0],false,_$[$0-2].first_line, _$[$0-2].first_column,"*"); 
+break;
+case 25:
+ this.$ = new Arithmetic($$[$0-2],$$[$0],false,_$[$0-2].first_line, _$[$0-2].first_column,"/");
+break;
+case 26:
+ this.$ = new Arithmetic($$[$0-2],$$[$0],false,_$[$0-2].first_line, _$[$0-2].first_column,"^"); 
+break;
+case 27:
+ this.$ = new Arithmetic($$[$0-2],$$[$0],false,_$[$0-2].first_line, _$[$0-2].first_column,"%"); 
+break;
+case 28:
+ this.$ = new Arithmetic($$[$0],null,true,_$[$0-1].first_line, _$[$0-1].first_column,"UNARY"); 
 break;
 case 30:
  this.$ = {type: 'eq', left: $$[$0-2], right: $$[$0]}; 
@@ -162,10 +179,13 @@ case 37:
  this.$ = {type: 'or', left: $$[$0-2], right: $$[$0]}; 
 break;
 case 38:
- this.$ = {type: 'ternary', left: $$[$0-4], middle: $$[$0-2], right: $$[$0]}; 
+ this.$ = new TernaryOperator($$[$0-4],$$[$0-2],$$[$0],_$[$0-4].first_line, _$[$0-4].first_column); 
 break;
 case 39:
  this.$ = {type: 'not', exp: $$[$0]}; 
+break;
+case 40:
+ this.$ = $$[$0]; 
 break;
 case 41:
  this.$ = new Identifier($$[$0],_$[$0].first_line, _$[$0].first_column);
@@ -182,8 +202,11 @@ break;
 case 45:
  this.$ = new Primitive($$[$0], "CHAR", _$[$0].first_line, _$[$0].first_column);
 break;
-case 46: case 47:
- this.$ = new Primitive($$[$0], "BOOLEAN", _$[$0].first_line, _$[$0].first_column);
+case 46:
+ this.$ = new Primitive(true, "BOOLEAN", _$[$0].first_line, _$[$0].first_column);
+break;
+case 47:
+ this.$ = new Primitive(false, "BOOLEAN", _$[$0].first_line, _$[$0].first_column);
 break;
         }
     }
