@@ -29,7 +29,7 @@ export class Controller {
 
   // append result to the console
   append(result: string): void {
-    this.console = this.console + result + "\r\n";
+    this.console = this.console + result + "\n";
   }
 
   // retrun a list of the symbol table

@@ -138,9 +138,13 @@ frac                        (?:\.[0-9]+)
   import { Print } from '../Instructions/Print';
   import { Cast } from '../Instructions/Cast';
   import { IF } from '../Instructions/ControlSentences/IF';
+  import { For } from '../Instructions/LoopSentences/For';
+  import { While } from '../Instructions/LoopSentences/While';
+  import { DoWhile } from '../Instructions/LoopSentences/DoWhile';
   import { Switch } from '../Instructions/ControlSentences/Switch';
   import { Case } from '../Instructions/ControlSentences/Case';
   import { Break } from '../Instructions/TransferSentences/Break';
+  import { Continue } from '../Instructions/TransferSentences/Continue';
   // EXPRESSIONS
   import { Identifier } from '../Expressions/Identifier';
   import { Primitive } from '../Expressions/Primitive';
@@ -201,7 +205,11 @@ SENTENCE : DECLARATION ';' { $$ = $1; }
          | INCDEC      ';' { $$ = $1; }
          | IF              { $$ = $1; }
          | SWITCH          { $$ = $1; }
+         | FOR             { $$ = $1; }
+         | WHILE           { $$ = $1; }
+         | DO_WHILE        { $$ = $1; }
          | t_break     ';' { $$ = new Break(); }
+         | t_continue  ';' { $$ = new Continue(); }
          ;
 
 DECLARATION : TYPE id '=' EXP
@@ -237,8 +245,8 @@ ASSIGNMENT : id '=' EXP
             }
            ;
 
-INCDEC    : id '++'     { $$ = new Arithmetic(new Identifier($1,@1.first_line, @1.first_column),new Primitive(1, "INTEGER", @1.first_line, @1.first_column),false,@1.first_line, @1.first_column,"+"); }
-          | id '--'     { $$ = new Arithmetic(new Identifier($1,@1.first_line, @1.first_column),new Primitive(1, "INTEGER", @1.first_line, @1.first_column),false,@1.first_line, @1.first_column,"-"); }
+INCDEC    : id '++'     { $$ = new Assigment($1,new Arithmetic(new Identifier($1,@1.first_line, @1.first_column),new Primitive(1, "INTEGER", @1.first_line, @1.first_column),false,@1.first_line, @1.first_column,"+"),@1.first_line, @1.first_column ); }
+          | id '--'     { $$ = new Assigment($1,new Arithmetic(new Identifier($1,@1.first_line, @1.first_column),new Primitive(1, "INTEGER", @1.first_line, @1.first_column),false,@1.first_line, @1.first_column,"-"),@1.first_line, @1.first_column ); }
           ;
 
 PRINT     : t_print '(' EXP ')' { $$ = new Print($3,@1.first_line, @1.first_column); }
@@ -264,6 +272,29 @@ CASE      : t_case EXP ':' SENTENCES { $$ = new Case($2,$4,@1.first_line, @1.las
           ;
 
 DEFAULT   : t_default ':' SENTENCES { $$ = new Case(null,$3,@1.first_line, @1.last_column); }
+          ;
+
+// loops
+// for
+FOR       : t_for '(' DEC_ASSING_FOR  ';' EXP ';' UPDATE_FOR ')' '{' SENTENCES '}' { $$ = new For($3,$5,$7,$10,@1.first_line, @1.last_column); }
+          ;
+
+DEC_ASSING_FOR : TYPE id '=' EXP { $$ = new VariableDeclaration($1, $2, $4, @1.first_line, @1.first_column); }
+               | id '=' EXP { $$ = new Assigment($1, $3, @1.first_line, @1.first_column); }
+               | { $$ = null; }
+               ;
+
+UPDATE_FOR     : id '++'     { $$ = new Assigment($1,new Arithmetic(new Identifier($1,@1.first_line, @1.first_column),new Primitive(1, "INTEGER", @1.first_line, @1.first_column),false,@1.first_line, @1.first_column,"+"),@1.first_line, @1.first_column ); }
+               | id '--'     { $$ = new Assigment($1,new Arithmetic(new Identifier($1,@1.first_line, @1.first_column),new Primitive(1, "INTEGER", @1.first_line, @1.first_column),false,@1.first_line, @1.first_column,"-"),@1.first_line, @1.first_column );}
+               | id '=' EXP  { $$ = new Assigment($1, $3, @1.first_line, @1.first_column); }
+               ;
+// while
+
+WHILE     : t_while '(' EXP ')' '{' SENTENCES '}' { $$ = new While($3,$6,@1.first_line, @1.last_column); }
+          ;
+
+// DO WHILE
+DO_WHILE  : t_do '{' SENTENCES '}' t_while '(' EXP ')' ';' { $$ = new DoWhile($3,$7,@1.first_line, @1.last_column); }
           ;
 
 CALLBACK  : id '('')'

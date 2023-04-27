@@ -32,11 +32,7 @@ export class IF implements Instruction {
     if (this.condition.getType(controller, ts) == type.BOOLEAN) {
       // if the condition value is true
       if (conditionValue) {
-        console.log(this.ifInstructions);
         // iterate through the instructions if
-        // for(const instr of this.ifInstructions){
-        //   console.log(instr.execute(controller, localST));
-        // }
         for (const inst of this.ifInstructions) {
           // let ret = inst.execute(controller, localST); // use the local variable 
           // TODO: add cotinue, break and return 

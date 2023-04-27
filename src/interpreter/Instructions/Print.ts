@@ -26,8 +26,6 @@ export class Print implements Instruction {
       let value = this.expression.getValue(controller, ts);
       controller.append(value);
     }else {
-      let error = new Errors("Semantico", `No se puede imprimir una expresion de tipo ${typeValue}`, this.line, this.column);
-      controller.errors.push(error);
       // send to the console
       controller.append(`Error Semantico: No se puede imprimir una expresion de tipo ${typeValue} en la linea ${this.line} y columna ${this.column}`);
     }
