@@ -20,7 +20,7 @@ export const TextEditor = () => {
     <Editor
       theme="vs-dark"
       options={{
-        folding: false,
+        folding: true,
         lineNumbersMinChars: 3,
         fontSize: 15,
         scrollBeyondLastLine: false,

@@ -78,6 +78,9 @@ frac                        (?:\.[0-9]+)
 "void"                          { return 't_void'; }
 
 /* =================== signs and symbols =================== */
+/* increment and decrement */
+"++"                            {return '++';}
+"--"                            {return '--';}
 /* arithmetic operators */
 "+"                             {return '+';}
 "-"                             {return '-';}
@@ -103,9 +106,6 @@ frac                        (?:\.[0-9]+)
 ")"                             {return ')';}
 /* assigment and declaration */
 "="                             {return '=';}
-/* increment and decrement */
-"++"                            {return '++';}
-"--"                            {return '--';}
 /* general signs */
 "$"                             {return '$';}
 ";"                             {return ';';}
@@ -136,14 +136,23 @@ frac                        (?:\.[0-9]+)
   import { VariableDeclaration } from '../Instructions/Declaration';
   import { Assigment } from '../Instructions/Assigment';
   import { Print } from '../Instructions/Print';
+  import { Cast } from '../Instructions/Cast';
+  import { IF } from '../Instructions/ControlSentences/IF';
+  import { Switch } from '../Instructions/ControlSentences/Switch';
+  import { Case } from '../Instructions/ControlSentences/Case';
+  import { Break } from '../Instructions/TransferSentences/Break';
   // EXPRESSIONS
   import { Identifier } from '../Expressions/Identifier';
   import { Primitive } from '../Expressions/Primitive';
   import { TernaryOperator } from '../Expressions/TernaryOperator';
   import { Arithmetic } from '../Expressions/Operations/Arithmetic';
+  import { Logic } from '../Expressions/Operations/Logic';
+  import { Relational } from '../Expressions/Operations/Relational';
+
 %}
 /* =================== ASSOCIATION AND PRECEDENCE OF OPERATORS =================== */
 // Incremento y decremento
+%left '?' // test
 %left '++' '--'
 
 // Operaciones logicas y relacionales
@@ -158,7 +167,6 @@ frac                        (?:\.[0-9]+)
 %nonassoc '^' 
 %left '*' '/' '%'
 %left '+' '-'
-%left '?'
 
 /* =================== GRAMMAR =================== */
 
@@ -190,17 +198,11 @@ SENTENCES : SENTENCES SENTENCE
 SENTENCE : DECLARATION ';' { $$ = $1; }
          | ASSIGNMENT  ';' { $$ = $1; }
          | PRINT       ';' { $$ = $1; }
+         | INCDEC      ';' { $$ = $1; }
+         | IF              { $$ = $1; }
+         | SWITCH          { $$ = $1; }
+         | t_break     ';' { $$ = new Break(); }
          ;
-
-SENTENCES_BLOCK : '{' SENTENCES '}'
-                {
-                  $$ = $2;
-                }
-                | '{' '}'
-                {
-                  $$ = [];
-                }
-                ;
 
 DECLARATION : TYPE id '=' EXP
             {
@@ -212,13 +214,7 @@ DECLARATION : TYPE id '=' EXP
             }
             | TYPE id '=' '(' TYPE ')' EXP 
             {
-              $$ = {
-                type: 'declaration with cast',
-                type_: $1,
-                id: $2,
-                type_cast: $5,
-                exp: $7
-              }
+              $$ = new Cast($1, $2, $7, $5 ,@1.first_line, @1.first_column);
             }
             ;
 
@@ -241,7 +237,33 @@ ASSIGNMENT : id '=' EXP
             }
            ;
 
+INCDEC    : id '++'     { $$ = new Arithmetic(new Identifier($1,@1.first_line, @1.first_column),new Primitive(1, "INTEGER", @1.first_line, @1.first_column),false,@1.first_line, @1.first_column,"+"); }
+          | id '--'     { $$ = new Arithmetic(new Identifier($1,@1.first_line, @1.first_column),new Primitive(1, "INTEGER", @1.first_line, @1.first_column),false,@1.first_line, @1.first_column,"-"); }
+          ;
+
 PRINT     : t_print '(' EXP ')' { $$ = new Print($3,@1.first_line, @1.first_column); }
+          ;
+
+// CONDITIONAL
+// if
+IF        : t_if '(' EXP ')' '{' SENTENCES '}' { $$ = new IF($3,$6,[],@1.first_line, @1.last_column);}
+          | t_if '(' EXP ')' '{' SENTENCES '}' t_else '{' SENTENCES '}' { $$ = new IF($3,$6,$10,@1.first_line, @1.last_column);}
+          | t_if '(' EXP ')' '{' SENTENCES '}' t_else IF { $$ = new IF($3,$6,[$9],@1.first_line, @1.last_column);}
+          ;
+// switch
+SWITCH    : t_switch '(' EXP ')' '{' CASE_LIST '}'            { $$ = new Switch($3,$6,null,@1.first_line, @1.last_column); }
+          | t_switch '(' EXP ')' '{' CASE_LIST  DEFAULT '}'   { $$ = new Switch($3,$6,$7,@1.first_line, @1.last_column); }
+          | t_switch '(' EXP ')' '{' DEFAULT '}'              { $$ = new Switch($3,[],$6,@1.first_line, @1.last_column); }
+          ;
+
+CASE_LIST : CASE_LIST CASE { $1.push($2); $$ = $1; }
+          | CASE { let arrCase = []; arrCase.push($1); $$ = arrCase; }
+          ;
+
+CASE      : t_case EXP ':' SENTENCES { $$ = new Case($2,$4,@1.first_line, @1.last_column); }
+          ;
+
+DEFAULT   : t_default ':' SENTENCES { $$ = new Case(null,$3,@1.first_line, @1.last_column); }
           ;
 
 CALLBACK  : id '('')'
@@ -268,21 +290,22 @@ EXP       : EXP '+' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_li
           | EXP '^' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"^"); }
           | EXP '%' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"%"); }
           | '-' EXP %prec negative { $$ = new Arithmetic($2,null,true,@1.first_line, @1.first_column,"UNARY"); }
+          | INCDEC                 { $$ = $1; }
           | '(' EXP ')'            { $$ = $2; }
-          | EXP '==' EXP           { $$ = {type: 'eq', left: $1, right: $3}; }
-          | EXP '!=' EXP           { $$ = {type: 'neq', left: $1, right: $3}; }
-          | EXP '<=' EXP           { $$ = {type: 'lte', left: $1, right: $3}; }
-          | EXP '>=' EXP           { $$ = {type: 'gte', left: $1, right: $3}; }
-          | EXP '<' EXP            { $$ = {type: 'lt', left: $1, right: $3}; }
-          | EXP '>' EXP            { $$ = {type: 'gt', left: $1, right: $3}; }
-          | EXP '&&' EXP           { $$ = {type: 'and', left: $1, right: $3}; }
-          | EXP '||' EXP           { $$ = {type: 'or', left: $1, right: $3}; }
+          | EXP '==' EXP           { $$ = new Relational($1,$3,false,@1.first_line, @1.first_column,"=="); }
+          | EXP '!=' EXP           { $$ = new Relational($1,$3,false,@1.first_line, @1.first_column,"!="); }
+          | EXP '<=' EXP           { $$ = new Relational($1,$3,false,@1.first_line, @1.first_column,"<="); }
+          | EXP '>=' EXP           { $$ = new Relational($1,$3,false,@1.first_line, @1.first_column,">="); }
+          | EXP '<' EXP            { $$ = new Relational($1,$3,false,@1.first_line, @1.first_column,"<"); }
+          | EXP '>' EXP            { $$ = new Relational($1,$3,false,@1.first_line, @1.first_column,">"); }
+          | EXP '&&' EXP           { $$ = new Logic($1,$3,false,@1.first_line, @1.first_column,"&&"); }
+          | EXP '||' EXP           { $$ = new Logic($1,$3,false,@1.first_line, @1.first_column,"||"); }
+          | '!' EXP                { $$ = new Logic($2,null,true,@1.first_line, @1.first_column,"!"); }
           | EXP '?' EXP ':' EXP    { $$ = new TernaryOperator($1,$3,$5,@1.first_line, @1.first_column); }
-          | '!' EXP                { $$ = {type: 'not', exp: $2}; }
           | CALLBACK               { $$ = $1; }
           | id                     { $$ = new Identifier($1,@1.first_line, @1.first_column);}
-          | integer                { $$ = new Primitive($1, "INTEGER", @1.first_line, @1.first_column);}
-          | float                  { $$ = new Primitive($1, "DOUBLE", @1.first_line, @1.first_column);}
+          | integer                { $$ = new Primitive(parseInt($1), "INTEGER", @1.first_line, @1.first_column);}
+          | float                  { $$ = new Primitive(parseFloat($1), "DOUBLE", @1.first_line, @1.first_column);}
           | words                  { $$ = new Primitive($1, "STRING", @1.first_line, @1.first_column);}
           | character              { $$ = new Primitive($1, "CHAR", @1.first_line, @1.first_column);}
           | t_true                 { $$ = new Primitive(true, "BOOLEAN", @1.first_line, @1.first_column);}

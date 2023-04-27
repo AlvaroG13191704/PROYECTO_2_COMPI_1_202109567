@@ -33,7 +33,26 @@ export class Primitive implements Expression {
   }
 
   getValue(controlador: Controller, ts: TableSymbol) {
-    return this.primitiveValue;
+    // evluate if the primitive is a string
+    if (this.type.enumType == type.STRING) {
+      return this.primitiveValue;
+    }
+    // evaluate if the primitive is a char
+    else if (this.type.enumType == type.CHAR) {
+      return this.primitiveValue;
+    }
+    // evaluate if the primitive is a boolean
+    else if (this.type.enumType == type.BOOLEAN) {
+      return this.primitiveValue;
+    }
+    // evaluate if the primitive is a integer
+    else if (this.type.enumType == type.INTEGER) {
+      return parseInt(this.primitiveValue);
+    }
+    // evaluate if the primitive is a double
+    else if (this.type.enumType == type.DOUBLE) {
+      return parseFloat(this.primitiveValue);
+    }
   }
 
   goOver(): Node {

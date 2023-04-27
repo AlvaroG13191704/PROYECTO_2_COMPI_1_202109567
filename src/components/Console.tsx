@@ -1,3 +1,4 @@
+import Editor from "@monaco-editor/react"
 import { analyzeStore } from "../store/resultStore"
 
 const Console = () => {
@@ -15,9 +16,23 @@ const Console = () => {
       {/* Separator */}
       <div className="border-b-2 border-gray-700"></div>
       {/* Console output */}
-      <div className="text-white">
-        {error ? error : result}
-      </div>
+      <Editor
+        theme="vs-dark"
+        options={{
+          folding: true,
+          lineNumbersMinChars: 3,
+          fontSize: 16,
+          scrollBeyondLastLine: false,
+          automaticLayout: true,
+          readOnly: true,
+          minimap: {
+            enabled: false
+          }
+        }}
+        width="100%"
+        height="90%"
+        value={error ? error : result}
+      />
     </div>
   )
 }
