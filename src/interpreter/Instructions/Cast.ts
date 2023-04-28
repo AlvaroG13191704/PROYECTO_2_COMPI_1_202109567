@@ -36,36 +36,36 @@ export class Cast implements Instruction{
 
     // verify if the id type is the same as the cast type
     let castType = this.castType.getType();
-    if(this.type.enumType === castType){
+    if(this.type.enumType == castType){
       // verify if the expression is not null
       if(this.expression !== null ){
         let valueType = this.expression.getType(controller, ts);
         let value = this.expression.getValue(controller, ts);
         // verify if the type of the variable is the same of the expression
-        if(this.type.enumType === valueType){
+        if(this.type.enumType == valueType){
           let newSymbol = new Symbol(1, this.type, this.id, value, undefined, undefined, this.line, this.column);
           ts.add(this.id, newSymbol);
         }else {
           // cast values if is possible
-          if(this.type.enumType === type.DOUBLE && valueType === type.INTEGER){
+          if(this.type.enumType == type.DOUBLE && valueType == type.INTEGER){
             let newSymbol = new Symbol(1, this.type, this.id, Math.round(value), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
-          }else if (this.type.enumType === type.INTEGER && valueType === type.DOUBLE){
+          }else if (this.type.enumType == type.INTEGER && valueType == type.DOUBLE){
             let newSymbol = new Symbol(1, this.type, this.id, Math.trunc(value), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
-          }else if(this.type.enumType === type.STRING && valueType === type.INTEGER){
+          }else if(this.type.enumType == type.STRING && valueType == type.INTEGER){
             let newSymbol = new Symbol(1, this.type, this.id, value.toString(), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
-          }else if(this.type.enumType === type.CHAR && valueType === type.INTEGER){
+          }else if(this.type.enumType == type.CHAR && valueType == type.INTEGER){
             let newSymbol = new Symbol(1, this.type, this.id, String.fromCharCode(value), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
-          }else if(this.type.enumType === type.STRING && valueType === type.DOUBLE){
+          }else if(this.type.enumType == type.STRING && valueType == type.DOUBLE){
             let newSymbol = new Symbol(1, this.type, this.id, value.toString(), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
-          }else if(this.type.enumType === type.INTEGER && valueType === type.CHAR){
+          }else if(this.type.enumType == type.INTEGER && valueType == type.CHAR){
             let newSymbol = new Symbol(1, this.type, this.id, value.charCodeAt(0), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
-          }else if(this.type.enumType === type.DOUBLE && valueType === type.CHAR){
+          }else if(this.type.enumType == type.DOUBLE && valueType == type.CHAR){
             let newSymbol = new Symbol(1, this.type, this.id, parseFloat(value.charCodeAt(0)), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
           }else {

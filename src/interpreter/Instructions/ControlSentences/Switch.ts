@@ -47,7 +47,7 @@ export class Switch implements Instruction {
         controller.append(`Error Semantico: No se puede evaluar la condicion del case en la linea ${this.line} y columna ${this.column}`);
       }
     }
-    if(!breakFlag && this.listDefault !== null) {
+    if(!breakFlag && this.listDefault != null) {
       let res: any = this.listDefault.execute(controller, localST);
       if(res instanceof Break){
         breakFlag = true;
@@ -67,7 +67,7 @@ export class Switch implements Instruction {
       cases.addChild(c.goOver());
     }
     root.addChild(cases);
-    if(this.listDefault !== null){
+    if(this.listDefault != null){
       let defaultNode = new Node("Default", "");
       defaultNode.addChild(this.listDefault.goOver());
       root.addChild(defaultNode);

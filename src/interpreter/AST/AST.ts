@@ -1,6 +1,7 @@
 import { Instruction } from "../Abstract/Instruction";
 import { Controller } from "../Controller";
 import { VariableDeclaration } from "../Instructions/Declaration";
+import { Function } from "../Instructions/Function";
 import { TableSymbol } from "../TableSymbols/TableSymbol";
 import { Node } from "./Node";
 
@@ -15,7 +16,12 @@ export class AST implements Instruction {
   execute(controller: Controller, ts: TableSymbol) {
     
     // first pass to declare functions and methods
-
+    for(let inst of this.list_instructions){
+      if(inst instanceof Function){
+        const func = inst as Function;
+        func.appendFunctionST(ts);
+      }
+    }
     // second pass to declare variables and some callabcks
     // print(x) | int c = 0;
     for(let instruction of this.list_instructions){
@@ -26,7 +32,7 @@ export class AST implements Instruction {
 
     // third pass to execute the rest of the instructions
     for(let instruction of this.list_instructions){
-      if(!(instruction instanceof VariableDeclaration)){
+      if(!(instruction instanceof VariableDeclaration) && !(instruction instanceof Function)){
         instruction.execute(controller, ts);
       }
     }

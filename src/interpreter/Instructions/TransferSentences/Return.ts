@@ -13,10 +13,10 @@ export class Return implements Instruction {
 
   execute(controller: Controller, ts: TableSymbol) {
     // verify if the value return is null
-    if(this.valueReturn === null) {
-      this;
-    }else {
+    if(this.valueReturn != null) {
       return this.valueReturn.getValue(controller, ts);
+    }else {
+      this;
     }
   }
 

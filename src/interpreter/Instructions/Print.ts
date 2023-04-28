@@ -22,7 +22,7 @@ export class Print implements Instruction {
     
     let typeValue = this.expression.getType(controller, ts);
 
-    if(typeValue === type.INTEGER || typeValue === type.DOUBLE || typeValue === type.STRING || typeValue === type.BOOLEAN || typeValue === type.CHAR){
+    if(typeValue == type.INTEGER || typeValue == type.DOUBLE || typeValue == type.STRING || typeValue == type.BOOLEAN || typeValue == type.CHAR){
       let value = this.expression.getValue(controller, ts);
       controller.append(value);
     }else {

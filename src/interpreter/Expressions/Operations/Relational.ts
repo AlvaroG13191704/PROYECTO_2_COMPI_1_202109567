@@ -19,7 +19,7 @@ export class Relational extends Operation implements Expression {
     typeExp1 = this.exp1.getType(controller, ts);
     typeExp2 = this.exp2.getType(controller, ts);
 
-    if (typeExp1 === type.ERROR || typeExp2 === type.ERROR) {
+    if (typeExp1 == type.ERROR || typeExp2 == type.ERROR) {
       return type.ERROR;
     }
 
@@ -30,36 +30,36 @@ export class Relational extends Operation implements Expression {
     BOOL    -> BOOL
     */
 
-    if (typeExp1 === type.INTEGER) {
-      if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.CHAR) {
+    if (typeExp1 == type.INTEGER) {
+      if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.CHAR) {
         return type.BOOLEAN;
       } else {
         return type.ERROR;
       }
     }
-    else if (typeExp1 === type.DOUBLE) {
-      if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.CHAR) {
+    else if (typeExp1 == type.DOUBLE) {
+      if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.CHAR) {
         return type.BOOLEAN;
       } else {
         return type.ERROR;
       }
     }
-    else if (typeExp1 === type.CHAR) {
-      if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.CHAR) {
+    else if (typeExp1 == type.CHAR) {
+      if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.CHAR) {
         return type.BOOLEAN;
       } else {
         return type.ERROR;
       }
     }
-    else if (typeExp1 === type.BOOLEAN) {
-      if (typeExp2 === type.BOOLEAN) {
+    else if (typeExp1 == type.BOOLEAN) {
+      if (typeExp2 == type.BOOLEAN) {
         return type.BOOLEAN;
       } else {
         return type.ERROR;
       }
     }
-    else if (typeExp1 === type.STRING) {
-      if (typeExp2 === type.STRING) {
+    else if (typeExp1 == type.STRING) {
+      if (typeExp2 == type.STRING) {
         return type.BOOLEAN;
       } else {
         return type.ERROR;
@@ -88,11 +88,11 @@ export class Relational extends Operation implements Expression {
 
     switch (this.operator) {
       case Operator.LT:
-        if (typeExp1 === type.INTEGER) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        if (typeExp1 == type.INTEGER) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseInt(valueExp1) < parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) < valueExp2.charCodeAt(0);
           }
           else {
@@ -101,11 +101,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.DOUBLE) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) < parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) < valueExp2.charCodeAt(0);
           }
           else {
@@ -114,11 +114,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.CHAR) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) < parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return valueExp1.charCodeAt(0) < valueExp2.charCodeAt(0);
           }
           else {
@@ -127,8 +127,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.BOOLEAN) {
-          if (typeExp2 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
+          if (typeExp2 == type.BOOLEAN) {
             let val1 = valueExp1 ? 1 : 0;
             let val2 = valueExp2 ? 1 : 0;
             return val1 < val2;
@@ -139,8 +139,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.STRING) {
-          if (typeExp2 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
+          if (typeExp2 == type.STRING) {
             return valueExp1 < valueExp2;
           }
           else {
@@ -151,11 +151,11 @@ export class Relational extends Operation implements Expression {
         }
         break;
       case Operator.GT:
-        if (typeExp1 === type.INTEGER) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        if (typeExp1 == type.INTEGER) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseInt(valueExp1) > parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) > valueExp2.charCodeAt(0);
           }
           else {
@@ -164,11 +164,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.DOUBLE) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) > parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) > valueExp2.charCodeAt(0);
           }
           else {
@@ -177,11 +177,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.CHAR) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) > parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return valueExp1.charCodeAt(0) > valueExp2.charCodeAt(0);
           }
           else {
@@ -190,8 +190,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.BOOLEAN) {
-          if (typeExp2 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
+          if (typeExp2 == type.BOOLEAN) {
             let val1 = valueExp1 ? 1 : 0;
             let val2 = valueExp2 ? 1 : 0;
             return val1 > val2;
@@ -202,8 +202,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.STRING) {
-          if (typeExp2 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
+          if (typeExp2 == type.STRING) {
             return valueExp1 > valueExp2;
           }
           else {
@@ -214,11 +214,11 @@ export class Relational extends Operation implements Expression {
         }
         break;
       case Operator.LTE:
-        if (typeExp1 === type.INTEGER) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        if (typeExp1 == type.INTEGER) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseInt(valueExp1) <= parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) <= valueExp2.charCodeAt(0);
           }
           else {
@@ -227,11 +227,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.DOUBLE) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) <= parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) <= valueExp2.charCodeAt(0);
           }
           else {
@@ -240,11 +240,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.CHAR) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) <= parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return valueExp1.charCodeAt(0) <= valueExp2.charCodeAt(0);
           }
           else {
@@ -253,8 +253,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.BOOLEAN) {
-          if (typeExp2 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
+          if (typeExp2 == type.BOOLEAN) {
             let val1 = valueExp1 ? 1 : 0;
             let val2 = valueExp2 ? 1 : 0;
             return val1 <= val2;
@@ -265,8 +265,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.STRING) {
-          if (typeExp2 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
+          if (typeExp2 == type.STRING) {
             return valueExp1 <= valueExp2;
           }
           else {
@@ -277,11 +277,11 @@ export class Relational extends Operation implements Expression {
         }
         break;
       case Operator.GTE:
-        if (typeExp1 === type.INTEGER) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        if (typeExp1 == type.INTEGER) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseInt(valueExp1) >= parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) >= valueExp2.charCodeAt(0);
           }
           else {
@@ -290,11 +290,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.DOUBLE) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) >= parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) >= valueExp2.charCodeAt(0);
           }
           else {
@@ -303,11 +303,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.CHAR) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) >= parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return valueExp1.charCodeAt(0) >= valueExp2.charCodeAt(0);
           }
           else {
@@ -316,8 +316,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.BOOLEAN) {
-          if (typeExp2 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
+          if (typeExp2 == type.BOOLEAN) {
             let val1 = valueExp1 ? 1 : 0;
             let val2 = valueExp2 ? 1 : 0;
             return val1 >= val2;
@@ -328,8 +328,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.STRING) {
-          if (typeExp2 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
+          if (typeExp2 == type.STRING) {
             return valueExp1 >= valueExp2;
           }
           else {
@@ -340,11 +340,11 @@ export class Relational extends Operation implements Expression {
         }
         break;
       case Operator.EQ:
-        if (typeExp1 === type.INTEGER) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        if (typeExp1 == type.INTEGER) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseInt(valueExp1) == parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) == valueExp2.charCodeAt(0);
           }
           else {
@@ -353,11 +353,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.DOUBLE) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) == parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) == valueExp2.charCodeAt(0);
           }
           else {
@@ -366,11 +366,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.CHAR) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) == parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return valueExp1.charCodeAt(0) == valueExp2.charCodeAt(0);
           }
           else {
@@ -379,8 +379,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.BOOLEAN) {
-          if (typeExp2 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
+          if (typeExp2 == type.BOOLEAN) {
             let val1 = valueExp1 ? 1 : 0;
             let val2 = valueExp2 ? 1 : 0;
             return val1 == val2;
@@ -391,8 +391,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.STRING) {
-          if (typeExp2 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
+          if (typeExp2 == type.STRING) {
             return valueExp1 == valueExp2;
           }
           else {
@@ -403,11 +403,11 @@ export class Relational extends Operation implements Expression {
         }
         break;
       case Operator.DIFF:
-        if (typeExp1 === type.INTEGER) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        if (typeExp1 == type.INTEGER) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseInt(valueExp1) != parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) != valueExp2.charCodeAt(0);
           }
           else {
@@ -416,11 +416,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.DOUBLE) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) != parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) != valueExp2.charCodeAt(0);
           }
           else {
@@ -429,11 +429,11 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.CHAR) {
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+        else if (typeExp1 == type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) != parseInt(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return valueExp1.charCodeAt(0) != valueExp2.charCodeAt(0);
           }
           else {
@@ -442,8 +442,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.BOOLEAN) {
-          if (typeExp2 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
+          if (typeExp2 == type.BOOLEAN) {
             let val1 = valueExp1 ? 1 : 0;
             let val2 = valueExp2 ? 1 : 0;
             return val1 != val2;
@@ -454,8 +454,8 @@ export class Relational extends Operation implements Expression {
             return null;
           }
         }
-        else if (typeExp1 === type.STRING) {
-          if (typeExp2 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
+          if (typeExp2 == type.STRING) {
             return valueExp1 != valueExp2;
           }
           else {

@@ -5,6 +5,8 @@ import { Controller } from "../../Controller";
 import { TableSymbol } from "../../TableSymbols/TableSymbol";
 import { type } from "../../TableSymbols/Type";
 import { Break } from "../TransferSentences/Break";
+import { Continue } from "../TransferSentences/Continue";
+import { Return } from "../TransferSentences/Return";
 
 export class IF implements Instruction {
 
@@ -34,9 +36,36 @@ export class IF implements Instruction {
       if (conditionValue) {
         // iterate through the instructions if
         for (const inst of this.ifInstructions) {
-          // let ret = inst.execute(controller, localST); // use the local variable 
-          // TODO: add cotinue, break and return 
-          inst.execute(controller, localST);
+          let ret = inst.execute(controller, localST); // use the local variable 
+          if(ret instanceof Break) {
+            if(controller.sent_loop) {
+              return ret;
+            }else {
+              // error
+              controller.append(`Error Semantico: Un if no puede contener un "Break" a menos que sea una ciclica, en la linea ${this.line} y columna ${this.column}`);
+              return null;
+            }
+          }
+          // continue
+          if(ret instanceof Continue){
+            if(controller.sent_loop) {
+              return ret;
+            }else {
+              // error
+              controller.append(`Error Semantico: Un if no puede contener un "Continue" a menos que sea una ciclica, en la linea ${this.line} y columna ${this.column}`);
+              return null;
+            }
+          }
+          // return 
+          if( ret instanceof Return){
+            return ret;
+          }
+          
+          // TODO: check if it is an error
+          if (ret != null) {
+            return ret;
+          }
+          
         }
       } else {
         // iterate through the instructions else
@@ -53,8 +82,10 @@ export class IF implements Instruction {
               return null;
             }
           }
-          // TODO: add return
-
+          // return 
+          if( ret instanceof Return){
+            return ret;
+          }
           if (ret !== null) {
             return ret;
           }

@@ -145,6 +145,9 @@ frac                        (?:\.[0-9]+)
   import { Case } from '../Instructions/ControlSentences/Case';
   import { Break } from '../Instructions/TransferSentences/Break';
   import { Continue } from '../Instructions/TransferSentences/Continue';
+  import { Return } from '../Instructions/TransferSentences/Return';
+  import { Function } from '../Instructions/Function';
+  import { Callback } from '../Instructions/Callback';
   // EXPRESSIONS
   import { Identifier } from '../Expressions/Identifier';
   import { Primitive } from '../Expressions/Primitive';
@@ -152,6 +155,8 @@ frac                        (?:\.[0-9]+)
   import { Arithmetic } from '../Expressions/Operations/Arithmetic';
   import { Logic } from '../Expressions/Operations/Logic';
   import { Relational } from '../Expressions/Operations/Relational';
+  // SYmbol
+  import { Symbol } from '../TableSymbols/Symbol';
 
 %}
 /* =================== ASSOCIATION AND PRECEDENCE OF OPERATORS =================== */
@@ -208,8 +213,12 @@ SENTENCE : DECLARATION ';' { $$ = $1; }
          | FOR             { $$ = $1; }
          | WHILE           { $$ = $1; }
          | DO_WHILE        { $$ = $1; }
+         | FUNCTION        { $$ = $1; }
+         | CALLBACK    ';' { $$ = $1; }
          | t_break     ';' { $$ = new Break(); }
          | t_continue  ';' { $$ = new Continue(); }
+         | t_return    ';' { $$ = new Return(null); }
+         | t_return EXP';' { $$ = new Return($2); }
          ;
 
 DECLARATION : TYPE id '=' EXP
@@ -225,19 +234,6 @@ DECLARATION : TYPE id '=' EXP
               $$ = new Cast($1, $2, $7, $5 ,@1.first_line, @1.first_column);
             }
             ;
-
-LISTEXP    : LISTEXP ',' EXP
-           {
-            $1.push($3);
-            $$ = $1;
-           }
-           | EXP
-           {
-            let arrlistEXP = [];
-            arrlistEXP.push($1);
-            $$ = arrlistEXP;
-           }
-           ;
 
 ASSIGNMENT : id '=' EXP 
             {
@@ -297,15 +293,33 @@ WHILE     : t_while '(' EXP ')' '{' SENTENCES '}' { $$ = new While($3,$6,@1.firs
 DO_WHILE  : t_do '{' SENTENCES '}' t_while '(' EXP ')' ';' { $$ = new DoWhile($3,$7,@1.first_line, @1.last_column); }
           ;
 
-CALLBACK  : id '('')'
-          {
-            $$ = {
-              type: 'callback void',
-              id: $1,
-              exp: $3
-            }
-          }
+// functions 
+
+FUNCTION  : TYPE id '(' LIST_PARAM ')' '{' SENTENCES '}'  { $$ = new Function(2,$1,$2,$4,false,$7,@1.first_line, @1.last_column); }
+          | TYPE id '(' ')' '{' SENTENCES '}'          { $$ = new Function(2,$1,$2,[],false,$6,@1.first_line, @1.last_column); }
+          | t_void id '(' LIST_PARAM ')' '{' SENTENCES '}'{ $$ = new Function(3,$1,$2,$4,true,$7,@1.first_line, @1.last_column); }
+          | t_void id '(' ')' '{' SENTENCES '}'        { $$ = new Function(3,$1,$2,[],true,$6,@1.first_line, @1.last_column); }
           ;
+
+LIST_PARAM : LIST_PARAM ',' TYPE id {$$ = $1; $$.push(new Symbol(6, $3, $4, null))}
+           | TYPE id {$$ = []; $$.push(new Symbol(6, $1, $2, null))}
+           ;
+
+CALLBACK  : id '(' LISTEXP ')' { $$ = new Callback($1,$3,@1.first_line, @1.last_column); }
+          | id '(' ')' { $$ = new Callback($1,[],@1.first_line, @1.last_column); }
+          ;
+
+LISTEXP    : LISTEXP ',' EXP
+           {
+            $$ = $1;
+            $$.push($3);
+           }
+           | EXP
+           {
+            $$ = [];
+            $$.push($1);
+           }
+           ;
 
 TYPE      : tint     { $$ = new Type("INTEGER");}
           | tdouble  { $$ = new Type("DOUBLE");}

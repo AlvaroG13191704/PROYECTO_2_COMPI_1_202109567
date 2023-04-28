@@ -31,8 +31,8 @@ export class Logic extends Operation implements Expression {
     }
     // compare the sing 
     if (!this.expU) {
-      if (typeExp1 === type.BOOLEAN) {
-        if (typeExp2 === type.BOOLEAN) {
+      if (typeExp1 == type.BOOLEAN) {
+        if (typeExp2 == type.BOOLEAN) {
           return type.BOOLEAN;
         } else {
           return type.ERROR;
@@ -41,7 +41,7 @@ export class Logic extends Operation implements Expression {
         return type.ERROR;
       }
     } else { // !true
-      if (typeExpU === type.BOOLEAN) {
+      if (typeExpU == type.BOOLEAN) {
         return type.BOOLEAN;
       } else {
         return type.ERROR;
@@ -61,7 +61,7 @@ export class Logic extends Operation implements Expression {
     let typeExpU: type;
 
     // if the expression is not unary
-    if (this.expU === false) {
+    if (this.expU == false) {
       // type
       typeExp1 = this.exp1.getType(controller, ts); // BOOLEAN
       typeExp2 = this.exp2.getType(controller, ts); // BOOLEAN
@@ -83,8 +83,8 @@ export class Logic extends Operation implements Expression {
 
     switch (this.operator) {
       case Operator.AND:
-        if (typeExp1 === type.BOOLEAN) {
-          if (typeExp2 === type.BOOLEAN) {
+        if (typeExp1 == type.BOOLEAN) {
+          if (typeExp2 == type.BOOLEAN) {
             return valueExp1 && valueExp2;
           } else {
             controller.append(` *** ERROR: Semantico, Incompatibilidad de tipos, no se puede realizar la operacion logica AND. En la linea ${this.line} y columna ${this.column}`)
@@ -96,8 +96,8 @@ export class Logic extends Operation implements Expression {
         }
         break;
       case Operator.OR:
-        if (typeExp1 === type.BOOLEAN) {
-          if (typeExp2 === type.BOOLEAN) {
+        if (typeExp1 == type.BOOLEAN) {
+          if (typeExp2 == type.BOOLEAN) {
             return valueExp1 || valueExp2;
           } else {
             controller.append(` *** ERROR: Semantico, Incompatibilidad de tipos, no se puede realizar la operacion logica OR. En la linea ${this.line} y columna ${this.column}`)
@@ -109,7 +109,7 @@ export class Logic extends Operation implements Expression {
         }
         break;
       case Operator.NOT:
-        if (typeExpU === type.BOOLEAN) {
+        if (typeExpU == type.BOOLEAN) {
           return !valueUnaryEXP;
         } else {
           controller.append(` *** ERROR: Semantico, Incompatibilidad de tipos, no se puede realizar la operacion logica NOT. En la linea ${this.line} y columna ${this.column}`)

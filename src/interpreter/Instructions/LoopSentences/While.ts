@@ -6,6 +6,7 @@ import { TableSymbol } from "../../TableSymbols/TableSymbol";
 import { type } from "../../TableSymbols/Type";
 import { Break } from "../TransferSentences/Break";
 import { Continue } from "../TransferSentences/Continue";
+import { Return } from "../TransferSentences/Return";
 
 export class While implements Instruction {
   public condition: Expression;
@@ -26,7 +27,7 @@ export class While implements Instruction {
     controller.sent_loop = true; // set the current loop
 
     // evaluate if the condition is true
-    if(this.condition.getType(controller,ts) === type.BOOLEAN){
+    if(this.condition.getType(controller,ts) == type.BOOLEAN){
       next: // label for the loop
       while(this.condition.getValue(controller,ts)){
         // create a new environment
@@ -42,7 +43,11 @@ export class While implements Instruction {
           if(ret instanceof Continue){
             continue next; // continue the loop
           }
-          // TODO: IMPLEMENT RETURN
+          // return 
+          if(ret instanceof Return){
+            controller.sent_loop = temp; // restore the current loop
+            return ret; // return the value
+          }
         }
       }
     }else {

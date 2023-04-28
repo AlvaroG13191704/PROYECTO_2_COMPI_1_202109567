@@ -5,6 +5,8 @@ import { Controller } from "../../Controller";
 import { TableSymbol } from "../../TableSymbols/TableSymbol";
 import { type } from "../../TableSymbols/Type";
 import { Break } from "../TransferSentences/Break";
+import { Continue } from "../TransferSentences/Continue";
+import { Return } from "../TransferSentences/Return";
 
 export class For implements Instruction{
   
@@ -38,7 +40,7 @@ export class For implements Instruction{
     // execute the condition
     // for(int i = 0; i < 10; i++){//int k; }
     // evaluate the condition is boolean
-    if(this.condition.getType(controller,localTS) === type.BOOLEAN){
+    if(this.condition.getType(controller,localTS) == type.BOOLEAN){
       // while the condition is true
       while(this.condition.getValue(controller, localTS)){
         // create local environment
@@ -47,6 +49,15 @@ export class For implements Instruction{
         for(const inst of this.listInstructions){
           let ret = inst.execute(controller, localTSFor);
           if( ret instanceof Break){
+            controller.sent_loop = temp;
+            return ret;
+          }
+          // continue
+          if(ret instanceof Continue){
+            continue;
+          }
+          // Return
+          if(ret instanceof Return) {
             controller.sent_loop = temp;
             return ret;
           }

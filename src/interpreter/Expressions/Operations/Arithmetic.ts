@@ -22,14 +22,14 @@ export class Arithmetic extends Operation implements Expression {
       typeExp1 = this.exp1.getType(controller, ts);
       typeExp2 = this.exp2.getType(controller, ts);
 
-      if (typeExp1 === type.ERROR || typeExp2 === type.ERROR) {
+      if (typeExp1 == type.ERROR || typeExp2 == type.ERROR) {
         return type.ERROR;
       }
     } else {
       // if is unary, the exp1 will get the negative value as -1 -> -exp1 -> exp1 = -1 exp1.getType = INTEGER
       typeExp1 = this.exp1.getType(controller, ts);
 
-      if (typeExp1 === type.ERROR) {
+      if (typeExp1 == type.ERROR) {
         return type.ERROR;
       }
 
@@ -41,17 +41,17 @@ export class Arithmetic extends Operation implements Expression {
       // Sum
       case Operator.SUM:
         // first row 
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.BOOLEAN || typeExp2 === type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.BOOLEAN || typeExp2 == type.CHAR) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
-          else if (typeExp2 === type.STRING) {
+          else if (typeExp2 == type.STRING) {
 
             return type.STRING;
           } else {
@@ -59,25 +59,25 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // second row
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.BOOLEAN || typeExp2 === type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.BOOLEAN || typeExp2 == type.CHAR) {
 
             return type.DOUBLE;
           }
-          else if (typeExp2 === type.STRING) {
+          else if (typeExp2 == type.STRING) {
 
             return type.STRING;
           }
         }
         // third row
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.STRING) {
+          else if (typeExp2 == type.STRING) {
 
             return type.STRING;
           } else {
@@ -86,18 +86,18 @@ export class Arithmetic extends Operation implements Expression {
 
         }
         // fourth row
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
 
           }
-          else if (typeExp2 === type.CHAR || typeExp2 === type.STRING) {
+          else if (typeExp2 == type.CHAR || typeExp2 == type.STRING) {
 
             return type.STRING;
           }
@@ -108,9 +108,9 @@ export class Arithmetic extends Operation implements Expression {
 
         }
         // fifth row
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.BOOLEAN || typeExp2 === type.CHAR || typeExp2 === type.STRING) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.BOOLEAN || typeExp2 == type.CHAR || typeExp2 == type.STRING) {
 
             return type.STRING;
           }
@@ -124,13 +124,13 @@ export class Arithmetic extends Operation implements Expression {
 
       case Operator.SUB:
         // first row
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.BOOLEAN || typeExp2 === type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.BOOLEAN || typeExp2 == type.CHAR) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -140,9 +140,9 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // second row
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.BOOLEAN || typeExp2 === type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.BOOLEAN || typeExp2 == type.CHAR) {
 
             return type.DOUBLE;
           }
@@ -152,13 +152,13 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // third row
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -169,13 +169,13 @@ export class Arithmetic extends Operation implements Expression {
 
         }
         // fourth row
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -186,20 +186,20 @@ export class Arithmetic extends Operation implements Expression {
 
         }
         // fifth row
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           return type.ERROR;
         }
         break;
 
       case Operator.MUL:
         // first row
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.CHAR) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -209,9 +209,9 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // second row
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.CHAR) {
 
             return type.DOUBLE;
           }
@@ -221,17 +221,17 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // third row
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           return type.ERROR;
         }
         // fourth row
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -241,16 +241,16 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // fifth row
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           return type.ERROR;
         }
         break;
 
       case Operator.DIV:
         // first row
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.CHAR) {
 
             return type.DOUBLE;
           }
@@ -260,9 +260,9 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // second row
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.CHAR) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.CHAR) {
 
             return type.DOUBLE;
           }
@@ -272,13 +272,13 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // third row
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           return type.ERROR;
         }
         // fourth row
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -288,20 +288,20 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // fifth row
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           return type.ERROR;
         }
         break;
 
       case Operator.POW:
         // first row
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
 
             return type.INTEGER;
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -311,9 +311,9 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // second row
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -323,24 +323,24 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // third row
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           return type.ERROR;
         }
         // fourth row
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
           return type.ERROR;
         }
         // fifth row
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           return type.ERROR;
         }
         break;
 
       case Operator.MOD:
         // first row
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -350,9 +350,9 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // second row
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE) {
 
             return type.DOUBLE;
           }
@@ -362,24 +362,24 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // third row
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           return type.ERROR;
         }
         // fourth row
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
           return type.ERROR;
         }
         // fifth row
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           return type.ERROR;
         }
         break;
 
       case Operator.UNARY:
-        if(typeExp1 === type.INTEGER){
+        if(typeExp1 == type.INTEGER){
           return type.INTEGER;
         }
-        else if(typeExp1 === type.DOUBLE){
+        else if(typeExp1 == type.DOUBLE){
           return type.DOUBLE;
         }
         else {
@@ -403,7 +403,7 @@ export class Arithmetic extends Operation implements Expression {
     let typeExpU: type;
 
     // if the expression is not unary
-    if (this.expU === false) {
+    if (this.expU == false) {
       // type
       typeExp1 = this.exp1.getType(controller, ts); // STRING
       typeExp2 = this.exp2.getType(controller, ts); // DOUBLE
@@ -427,22 +427,22 @@ export class Arithmetic extends Operation implements Expression {
     switch (this.operator) {
       case Operator.SUM:
         // Integer
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseInt(valueExp1) + parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) + parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.BOOLEAN) {
+          else if (typeExp2 == type.BOOLEAN) {
             let bool_value = valueExp2 ? 1 : 0;
             return parseInt(valueExp1) + bool_value;
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) + valueExp2.charCodeAt(0);
           }
-          else if (typeExp2 === type.STRING) {
+          else if (typeExp2 == type.STRING) {
             return valueExp1 + valueExp2;
           }
           else {
@@ -451,22 +451,22 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Double
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseFloat(valueExp1) + parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) + parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.BOOLEAN) {
+          else if (typeExp2 == type.BOOLEAN) {
             let bool_value = valueExp2 ? 1 : 0;
             return parseFloat(valueExp1) + bool_value;
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) + valueExp2.charCodeAt(0);
           }
-          else if (typeExp2 === type.STRING) {
+          else if (typeExp2 == type.STRING) {
             return valueExp1 + valueExp2;
           }
           else {
@@ -475,16 +475,16 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Boolean
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           let num_bool = valueExp1 ? 1 : 0;
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return num_bool + parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return num_bool + parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.STRING) {
+          else if (typeExp2 == type.STRING) {
             return num_bool.toString() + valueExp2;
           }
           else {
@@ -494,18 +494,18 @@ export class Arithmetic extends Operation implements Expression {
 
         }
         // Char
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return valueExp1.charCodeAt(0) + parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) + parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return valueExp1 + valueExp2;
           }
-          else if (typeExp2 === type.STRING) {
+          else if (typeExp2 == type.STRING) {
             return String(typeExp1) + valueExp2;
           }
           else {
@@ -514,9 +514,9 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // String
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
 
-          if (typeExp2 === type.INTEGER || typeExp2 === type.DOUBLE || typeExp2 === type.BOOLEAN || typeExp2 === type.CHAR || typeExp2 === type.STRING) {
+          if (typeExp2 == type.INTEGER || typeExp2 == type.DOUBLE || typeExp2 == type.BOOLEAN || typeExp2 == type.CHAR || typeExp2 == type.STRING) {
             return valueExp1 + valueExp2;
           }
           else {
@@ -528,19 +528,19 @@ export class Arithmetic extends Operation implements Expression {
 
       case Operator.SUB:
         // Integer
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseInt(valueExp1) - parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) - parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.BOOLEAN) {
+          else if (typeExp2 == type.BOOLEAN) {
             let bool_value = valueExp2 ? 1 : 0;
             return parseInt(valueExp1) - bool_value;
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) - valueExp2.charCodeAt(0);
           }
           else {
@@ -549,19 +549,19 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Double
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseFloat(valueExp1) - parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) - parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.BOOLEAN) {
+          else if (typeExp2 == type.BOOLEAN) {
             let bool_value = valueExp2 ? 1 : 0;
             return parseFloat(valueExp1) - bool_value;
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) - valueExp2.charCodeAt(0);
           }
           else {
@@ -570,13 +570,13 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Boolean
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           let num_bool = valueExp1 ? 1 : 0;
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return num_bool - parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return num_bool - parseFloat(valueExp2);
           }
           else {
@@ -585,12 +585,12 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Char
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return valueExp1.charCodeAt(0) - parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) - parseFloat(valueExp2);
           }
           else {
@@ -599,22 +599,22 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // string
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para la resta STRING, en la linea ${this.line} y columna ${this.column}`);
         }
         break;
 
       case Operator.MUL:
         // Integer
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseInt(valueExp1) * parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) * parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) * valueExp2.charCodeAt(0);
           }
           else {
@@ -623,15 +623,15 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Double
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseFloat(valueExp1) * parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) * parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) * valueExp2.charCodeAt(0);
           }
           else {
@@ -640,16 +640,16 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // BOOLEAN
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para la multiplicación BOOL, en la linea ${this.line} y columna ${this.column}`);
         }
         // Char
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return valueExp1.charCodeAt(0) * parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) * parseFloat(valueExp2);
           }
           else {
@@ -658,22 +658,22 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // string
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para la multiplicación STRING, en la linea ${this.line} y columna ${this.column}`);
         }
         break;
 
       case Operator.DIV:
         // Integer
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseFloat(valueExp1) / parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) / parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseInt(valueExp1) / valueExp2.charCodeAt(0);
           }
           else {
@@ -682,15 +682,15 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Double
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseFloat(valueExp1) / parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) / parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.CHAR) {
+          else if (typeExp2 == type.CHAR) {
             return parseFloat(valueExp1) / valueExp2.charCodeAt(0);
           }
           else {
@@ -699,16 +699,16 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // BOOLEAN
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para la división BOOL, en la linea ${this.line} y columna ${this.column}`);
         }
         // Char
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return valueExp1.charCodeAt(0) / parseInt(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return valueExp1.charCodeAt(0) / parseFloat(valueExp2);
           }
           else {
@@ -717,19 +717,19 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // string
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para la división STRING, en la linea ${this.line} y columna ${this.column}`);
         }
         break;
 
       case Operator.MOD:
         // Integer
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseFloat(valueExp1) % parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) % parseFloat(valueExp2);
           }
           else {
@@ -738,12 +738,12 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Double
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return parseFloat(valueExp1) % parseFloat(valueExp2);
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return parseFloat(valueExp1) % parseFloat(valueExp2);
           }
           else {
@@ -752,28 +752,28 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // BOOLEAN
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para el modulo BOOL, en la linea ${this.line} y columna ${this.column}`);
         }
         // Char
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
           // error
           controller.append(`*** ERROR Semantico: Tipos no aceptados para el modulo CHAR, en la linea ${this.line} y columna ${this.column}`);
         }
         // string
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para el modulo STRING, en la linea ${this.line} y columna ${this.column}`);
         }
         break;
 
       case Operator.POW:
         // Integer
-        if (typeExp1 === type.INTEGER) {
+        if (typeExp1 == type.INTEGER) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return Math.pow(parseInt(valueExp1), parseInt(valueExp2));
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return Math.pow(parseFloat(valueExp1), parseFloat(valueExp2));
           }
           else {
@@ -782,12 +782,12 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // Double
-        else if (typeExp1 === type.DOUBLE) {
+        else if (typeExp1 == type.DOUBLE) {
 
-          if (typeExp2 === type.INTEGER) {
+          if (typeExp2 == type.INTEGER) {
             return Math.pow(parseFloat(valueExp1), parseFloat(valueExp2));
           }
-          else if (typeExp2 === type.DOUBLE) {
+          else if (typeExp2 == type.DOUBLE) {
             return Math.pow(parseFloat(valueExp1), parseFloat(valueExp2));
           }
           else {
@@ -796,22 +796,22 @@ export class Arithmetic extends Operation implements Expression {
           }
         }
         // BOOLEAN
-        else if (typeExp1 === type.BOOLEAN) {
+        else if (typeExp1 == type.BOOLEAN) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para la potencia BOOL, en la linea ${this.line} y columna ${this.column}`);
         }
         // Char
-        else if (typeExp1 === type.CHAR) {
+        else if (typeExp1 == type.CHAR) {
           // error
           controller.append(`*** ERROR Semantico: Tipos no aceptados para la potencia CHAR, en la linea ${this.line} y columna ${this.column}`);
         }
         // string
-        else if (typeExp1 === type.STRING) {
+        else if (typeExp1 == type.STRING) {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para la potencia STRING, en la linea ${this.line} y columna ${this.column}`);
         }
         break;
 
       case Operator.UNARY:
-        if(typeExpU === type.INTEGER || typeExpU === type.DOUBLE){
+        if(typeExpU == type.INTEGER || typeExpU == type.DOUBLE){
           return -valueUnaryEXP;
         }else {
           controller.append(`*** ERROR Semantico: Tipos no aceptados para el menos unario, en la linea ${this.line} y columna ${this.column}`);

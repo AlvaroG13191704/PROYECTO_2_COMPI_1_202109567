@@ -26,14 +26,14 @@ export class Assigment implements Instruction {
       // if exists, verify if the value is the same type of the variable
       let value = this.value.getValue(controller, ts);
       let variable = ts.getSymbol(this.id);
-      if (variable?.type.enumType === this.value.getType(controller, ts)) {
+      if (variable?.type.enumType == this.value.getType(controller, ts)) {
         // if is the same type, assign the value to the variable
         ts.getSymbol(this.id)?.setValue(value);
       } else {
         // cast
-        if (variable?.type.enumType === type.DOUBLE && this.value.getType(controller, ts) === type.INTEGER) {
+        if (variable?.type.enumType == type.DOUBLE && this.value.getType(controller, ts) == type.INTEGER) {
           ts.getSymbol(this.id)?.setValue(value);
-        } else if (variable?.type.enumType === type.INTEGER && this.value.getType(controller, ts) === type.DOUBLE) {
+        } else if (variable?.type.enumType == type.INTEGER && this.value.getType(controller, ts) == type.DOUBLE) {
           ts.getSymbol(this.id)?.setValue(Math.trunc(value));
         }else {
           // error

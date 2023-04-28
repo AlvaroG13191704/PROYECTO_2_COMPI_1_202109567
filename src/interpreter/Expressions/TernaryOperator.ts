@@ -26,7 +26,7 @@ export class TernaryOperator implements Expression {
     let valueCondition = this.condition.getValue(controller, ts);
 
     // evaluate if the type of the condition is boolean
-    if (this.condition.getType(controller, ts) === type.BOOLEAN) {
+    if (this.condition.getType(controller, ts) == type.BOOLEAN) {
       return valueCondition ? this.ifTrue.getType(controller, ts) : this.ifFalse.getType(controller, ts);
     } else {
       // error, the condition is not boolean
@@ -43,7 +43,7 @@ export class TernaryOperator implements Expression {
     let valueCondition = this.condition.getValue(controller, ts);
 
     // evaluate if the type of the condition is boolean
-    if (this.condition.getType(controller, ts) === type.BOOLEAN) {
+    if (this.condition.getType(controller, ts) == type.BOOLEAN) {
       return valueCondition ? this.ifTrue.getValue(controller, ts) : this.ifFalse.getValue(controller, ts);
     } else {
       // error, the condition is not boolean
