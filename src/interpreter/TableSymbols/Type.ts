@@ -45,4 +45,27 @@ export class Type {
       return type.ERROR;
     }
   }
+  // get type to string
+  public getTypeToString(): string {
+    if(this.enumType === type.INTEGER){
+      return "INTEGER";
+    }
+    else if(this.enumType === type.DOUBLE){
+      return "DOUBLE";
+    }
+    else if(this.enumType === type.BOOLEAN){
+      return "BOOLEAN";
+    }
+    else if(this.enumType === type.CHAR){
+      return "CHAR";
+    }
+    else if(this.enumType === type.STRING){
+      return "STRING";
+    }
+    else if(this.enumType === type.VOID){
+      return "VOID";
+    }else {
+      return "ERROR";
+    }
+  }
 }

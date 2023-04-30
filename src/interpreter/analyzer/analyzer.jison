@@ -69,7 +69,7 @@ frac                        (?:\.[0-9]+)
 "length"                        { return 't_length'; }
 "truncate"                      { return 't_truncate'; }
 "round"                         { return 't_round'; }
-"typeOf"                        { return 't_typeOf'; }
+"typeof"                        { return 't_typeof'; }
 "toString"                      { return 't_toString'; }
 "toCharArray"                   { return 't_toCharArray'; }
 
@@ -155,6 +155,13 @@ frac                        (?:\.[0-9]+)
   import { Arithmetic } from '../Expressions/Operations/Arithmetic';
   import { Logic } from '../Expressions/Operations/Logic';
   import { Relational } from '../Expressions/Operations/Relational';
+  // natives
+  import { ToLower } from '../Expressions/Natives/toLower';
+  import { ToUpper } from '../Expressions/Natives/ToUpper';
+  import { ToString } from '../Expressions/Natives/ToString';
+  import { Truncate } from '../Expressions/Natives/Truncate';
+  import { Round } from '../Expressions/Natives/Round';
+  import { Typeof } from '../Expressions/Natives/Typeof';
   // SYmbol
   import { Symbol } from '../TableSymbols/Symbol';
 
@@ -307,6 +314,12 @@ LIST_PARAM : LIST_PARAM ',' TYPE id {$$ = $1; $$.push(new Symbol(6, $3, $4, null
 
 CALLBACK  : id '(' LISTEXP ')' { $$ = new Callback($1,$3,@1.first_line, @1.last_column); }
           | id '(' ')' { $$ = new Callback($1,[],@1.first_line, @1.last_column); }
+          | t_toLower '(' EXP ')'  {$$ = new ToLower($3,@1.first_line, @1.first_column);}
+          | t_toUpper '(' EXP ')'  {$$ = new ToUpper($3,@1.first_line, @1.first_column);}
+          | t_toString '(' EXP ')' {$$ = new ToString($3,@1.first_line, @1.first_column);}
+          | t_truncate '(' EXP ')' {$$ = new Truncate($3,@1.first_line, @1.first_column);}
+          | t_round '(' EXP ')'    {$$ = new Round($3,@1.first_line, @1.first_column);}
+          | t_typeof '(' EXP ')'   {$$ = new Typeof($3,@1.first_line, @1.first_column);}
           ;
 
 LISTEXP    : LISTEXP ',' EXP
