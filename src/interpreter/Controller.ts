@@ -31,39 +31,39 @@ export class Controller {
   }
 
   // retrun a list of the symbol table
-  getTableSymbol(controller: Controller, ts: TableSymbol) {
+  getTableSymbol(controller: Controller, ts: TableSymbol): string {
     let graphviz: string = "digraph SymbolTable {\n";
     // add the header of the table: Identificador, Tipo, Primitivo,Linea, Columna
-    graphviz += "n[shape=none label = <\n" +
-      " <TABLE border=\"0\" cellspacing=\"0\" cellpadding=\"10\" style=\"collapse\">\n" +
-      "  <TR >\n" +
-      "  <TD colspan=\"6\" border=\"1\">No.</TD>\n" +
-      "  <TD rowspan=\"2\" colspan=\"1\" border=\"1\">Identificador</TD>\n" +
-      "  <TD colspan=\"6\" border=\"1\">Tipo</TD>\n" +
-      "  <TD colspan=\"6\" border=\"1\">Primitivo</TD>\n" +
-      "  <TD colspan=\"6\" border=\"1\">Linea</TD>\n" +
-      "  <TD colspan=\"6\" border=\"1\">Columna</TD>\n" +
-      "  </TR>\n";
-    // add the body of the table
-    while (ts != null) {
-      ts.table.forEach((sim: Symbol, key: string) => {
-        console.log(sim);
+    graphviz += "node [shape=plaintext];\n" +
+      " table [label=<\n" +
+      "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">\n" +
+      "<tr><td>Identificador</td><td>Tipo</td><td>Rol</td><td>Valor</td><td>Linea</td><td>Columna</td></tr>\n";
+    // end
+    // access to the static list of the table symbol
+    if (TableSymbol.getTable() !== undefined) {
+      TableSymbol.getTable().forEach((symbol: Symbol, key: number) => {
+        // add the row of the table
+        graphviz += "<tr><td>" + symbol.id + "</td><td>" + ((this.getType(symbol) == undefined) ? "void" : this.getType(symbol)) + "</td><td>" + this.getRole(symbol) + "</td>" + "<td>" + ((this.getValue(symbol) === null) ? "- -" : this.getValue(symbol)) + "</td><td>" + symbol.line + "</td><td>" + symbol.column + "</td></tr>\n";
+        // end
       })
-      ts = ts.previous;
     }
     // end
-    graphviz += " </TABLE>\n" +
+    graphviz += " </table>\n" +
       ">];\n" +
       "}";
 
-    console.log(graphviz);
+    return graphviz;
   }
 
 
   // get the value of the table
   getValue(symbol: Symbol): string {
     if (symbol.value !== null) {
-      return symbol.value.toString();
+      if(symbol.value instanceof Array){
+        return symbol.value.toString();
+      }else {
+        return symbol.value;
+      }
     } else {
       return "null";
     }
@@ -71,7 +71,7 @@ export class Controller {
 
   // get type of the symbol
   getType(symbol: Symbol): string {
-    return symbol.type.nameType.toLowerCase();
+    return symbol.type.nameType;
   }
 
   // get the role of the symbol
@@ -79,19 +79,19 @@ export class Controller {
     let role: string = "";
     switch (symbol.symbol) {
       case 1:
-        role = "variable";
+        role = "Variable";
         break;
       case 2:
-        role = "function";
+        role = "Función";
         break;
       case 3:
-        role = "method";
+        role = "Método";
         break;
       case 4:
-        role = "vector";
+        role = "Vector";
         break;
       case 5:
-        role = "list";
+        role = "Lita";
         break;
       case 6:
         role = "param";

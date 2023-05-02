@@ -131,7 +131,7 @@ const Navbar = () => {
                     </div>
                     <div>
                       {
-                        (reportsGraphs.table_errors === "" || reportsGraphs.ast_graph === "" || reportsGraphs.symbol_table === "") ?
+                        ( reportsGraphs.ast_graph === "" || reportsGraphs.symbol_table === "") ?
                           ("No hay reporte disponible")
                           : ((report === 1) ?
                             (<Graphviz dot={reportsGraphs.table_errors} options={{ zoom: true, width: 1240, height: 500, }} />)

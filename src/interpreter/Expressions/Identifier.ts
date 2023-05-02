@@ -24,8 +24,6 @@ export class Identifier implements Expression {
     if(exist_id != null){
       return exist_id.type.enumType;
     }else {
-      let error = new Errors("Semantico", `No existe la variable ${this.identifier}`, this.line, this.column);
-      controller.errors.push(error);
       // send to the console
       controller.append(`Error Semantico: No existe la variable ${this.identifier} en la linea ${this.line} y columna ${this.column}`);
       return type.ERROR;
@@ -37,8 +35,6 @@ export class Identifier implements Expression {
     if(exist_id != null){
       return exist_id.value;
     }else {
-      let error = new Errors("Semantico", `No existe la variable ${this.identifier}`, this.line, this.column);
-      controller.errors.push(error);
       // send to the console
       controller.append(`Error Semantico: No existe la variable ${this.identifier} en la linea ${this.line} y columna ${this.column}`);
       return null;

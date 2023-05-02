@@ -45,29 +45,37 @@ export class Cast implements Instruction{
         if(this.type.enumType == valueType){
           let newSymbol = new Symbol(1, this.type, this.id, value, undefined, undefined, this.line, this.column);
           ts.add(this.id, newSymbol);
+          TableSymbol.add_to_graph(this.id, newSymbol); // add to the graph
         }else {
           // cast values if is possible
           if(this.type.enumType == type.DOUBLE && valueType == type.INTEGER){
             let newSymbol = new Symbol(1, this.type, this.id, Math.round(value), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
+            TableSymbol.add_to_graph(this.id, newSymbol); // add to the graph
           }else if (this.type.enumType == type.INTEGER && valueType == type.DOUBLE){
             let newSymbol = new Symbol(1, this.type, this.id, Math.trunc(value), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
+            TableSymbol.add_to_graph(this.id, newSymbol); // add to the graph
           }else if(this.type.enumType == type.STRING && valueType == type.INTEGER){
             let newSymbol = new Symbol(1, this.type, this.id, value.toString(), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
+            TableSymbol.add_to_graph(this.id, newSymbol); // add to the graph
           }else if(this.type.enumType == type.CHAR && valueType == type.INTEGER){
             let newSymbol = new Symbol(1, this.type, this.id, String.fromCharCode(value), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
+            TableSymbol.add_to_graph(this.id, newSymbol); // add to the graph
           }else if(this.type.enumType == type.STRING && valueType == type.DOUBLE){
             let newSymbol = new Symbol(1, this.type, this.id, value.toString(), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
+            TableSymbol.add_to_graph(this.id, newSymbol); // add to the graph
           }else if(this.type.enumType == type.INTEGER && valueType == type.CHAR){
             let newSymbol = new Symbol(1, this.type, this.id, value.charCodeAt(0), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
+            TableSymbol.add_to_graph(this.id, newSymbol); // add to the graph
           }else if(this.type.enumType == type.DOUBLE && valueType == type.CHAR){
             let newSymbol = new Symbol(1, this.type, this.id, parseFloat(value.charCodeAt(0)), undefined, undefined, this.line, this.column);
             ts.add(this.id, newSymbol);
+            TableSymbol.add_to_graph(this.id, newSymbol); // add to the graph
           }else {
             // if the types are different, then return an error
             controller.append(`Error Semantico: El tipo de la variable ${this.id} no puede ser casteado,en la linea ${this.line} y columna ${this.column}`);

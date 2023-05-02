@@ -21,6 +21,8 @@ export class Function extends Symbol implements Instruction {
   appendFunctionST(ts: TableSymbol){
     if(!(ts.exist(this.id))){
       ts.add(this.id, this);
+      // add the function to the static table
+      TableSymbol.add_to_graph(this.id, this);
     }else {
       // error
       console.log("Error Semantico: La funcion " + this.id + " ya existe en la linea " + this.line + " y columna " + this.column);  

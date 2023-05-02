@@ -9,6 +9,8 @@ export enum type {
   STRING,
   ERROR,
   UNARY,
+  VECTOR,
+  LIST,
   VOID
 }
 
@@ -38,6 +40,8 @@ export class Type {
     }
     else if(this.nameType === "STRING"){
       return type.STRING;
+    }else if(this.nameType === "VECTOR"){
+      return type.VECTOR;
     }
     else if(this.nameType === "VOID"){
       return type.VOID;

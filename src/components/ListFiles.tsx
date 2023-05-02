@@ -45,12 +45,15 @@ const ListFiles = () => {
       updateResult(controller.console)
     }
     
-    controller.getTableSymbol(controller, ts_global);
+    let ts_graph = controller.getTableSymbol(controller, ts_global);
+    console.log(ts_graph)
+    //clean the symbol table
+    TableSymbol.cleanTable();
     // update the report
     updateReport({
       "table_errors":"",
       "ast_graph": graph,
-      "symbol_table": ""
+      "symbol_table": ts_graph
     })
     
   }

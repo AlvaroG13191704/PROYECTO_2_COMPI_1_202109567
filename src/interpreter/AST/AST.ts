@@ -3,6 +3,7 @@ import { Controller } from "../Controller";
 import { VariableDeclaration } from "../Instructions/Declaration";
 import { Function } from "../Instructions/Function";
 import { Main } from "../Instructions/Main";
+import { Vector } from "../Instructions/Vector";
 import { TableSymbol } from "../TableSymbols/TableSymbol";
 import { Node } from "./Node";
 
@@ -26,7 +27,7 @@ export class AST implements Instruction {
     // second pass to declare variables and some callabcks
     // print(x) | int c = 0;
     for(let instruction of this.list_instructions){
-      if(instruction instanceof VariableDeclaration){
+      if(instruction instanceof VariableDeclaration || instruction instanceof Vector){
         instruction.execute(controller, ts);
       }
     }

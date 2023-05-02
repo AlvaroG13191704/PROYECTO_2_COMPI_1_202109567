@@ -150,6 +150,9 @@ frac                        (?:\.[0-9]+)
   import { Return } from '../Instructions/TransferSentences/Return';
   import { Function } from '../Instructions/Function';
   import { Callback } from '../Instructions/Callback';
+  // DATA STRUCTURES
+  import { Vector } from '../Instructions/Vector';
+  import { ModifyVector } from '../Instructions/DataStructure/ModifyVector';
   // EXPRESSIONS
   import { Identifier } from '../Expressions/Identifier';
   import { Primitive } from '../Expressions/Primitive';
@@ -157,6 +160,8 @@ frac                        (?:\.[0-9]+)
   import { Arithmetic } from '../Expressions/Operations/Arithmetic';
   import { Logic } from '../Expressions/Operations/Logic';
   import { Relational } from '../Expressions/Operations/Relational';
+  // data structures
+  import { AccessVector } from '../Expressions/DataStructures/Vector/AccessVector';
   // natives
   import { ToLower } from '../Expressions/Natives/ToLower';
   import { ToUpper } from '../Expressions/Natives/ToUpper';
@@ -170,22 +175,34 @@ frac                        (?:\.[0-9]+)
 
 %}
 /* =================== ASSOCIATION AND PRECEDENCE OF OPERATORS =================== */
-// Incremento y decremento
-%left '?' // test
-%left '++' '--'
-
-// Operaciones logicas y relacionales
-%left '&&'
+%left '?' ':'
 %left '||'
-%left '!=' '==' 
-%left '>=', '<=', '<', '>'
-%right '!' '('
-
-// Operaciones numericas
-%right negative
-%nonassoc '^' 
-%left '*' '/' '%'
+%left '&&'
+%left '!'
+%left '==' '!=' '<' '>' '<=' '>='
 %left '+' '-'
+%left '*' '/' '%'
+%right '^'
+%nonassoc '('
+%right '++','--'
+%left negative
+
+// // Incremento y decremento
+// %left '?' // test
+// %left '++' '--'
+
+// // Operaciones logicas y relacionales
+// %left '&&'
+// %left '||'
+// %left '!=' '==' 
+// %left '>=', '<=', '<', '>'
+// %right '!' '('
+
+// // Operaciones numericas
+// %right negative
+// %nonassoc '^' 
+// %left '*' '/' '%'
+// %left '+' '-'
 
 /* =================== GRAMMAR =================== */
 
@@ -244,11 +261,23 @@ DECLARATION : TYPE id '=' EXP
             {
               $$ = new Cast($1, $2, $7, $5 ,@1.first_line, @1.first_column);
             }
+            | TYPE'['']' id '=' t_new TYPE'[' EXP ']'
+            {
+              $$ = new Vector(1, $1,$4,$9,null, @1.first_line, @1.first_column);
+            }
+            | TYPE'['']' id '=' '{' LISTEXP '}'
+            {
+              $$ = new Vector(2, $1,$4,null,$7, @1.first_line, @1.first_column);
+            }
             ;
 
 ASSIGNMENT : id '=' EXP 
             {
               $$ = new Assigment($1, $3, @1.first_line, @1.first_column);
+            }
+           | id '[' EXP ']' '=' EXP 
+            {
+              $$ = new ModifyVector($1, $3, $6, @1.first_line, @1.first_column);
             }
            ;
 
@@ -318,6 +347,7 @@ LIST_PARAM : LIST_PARAM ',' TYPE id {$$ = $1; $$.push(new Symbol(6, $3, $4, null
 
 CALLBACK  : id '(' LISTEXP ')' { $$ = new Callback($1,$3,@1.first_line, @1.last_column); }
           | id '(' ')' { $$ = new Callback($1,[],@1.first_line, @1.last_column); }
+          | id '[' EXP ']' { $$ = new AccessVector($1,$3,@1.first_line, @1.last_column); }
           | t_toLower '(' EXP ')'  {$$ = new ToLower($3,@1.first_line, @1.first_column);}
           | t_toUpper '(' EXP ')'  {$$ = new ToUpper($3,@1.first_line, @1.first_column);}
           | t_toString '(' EXP ')' {$$ = new ToString($3,@1.first_line, @1.first_column);}

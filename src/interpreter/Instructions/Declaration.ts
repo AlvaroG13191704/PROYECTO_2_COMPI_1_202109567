@@ -29,11 +29,9 @@ export class VariableDeclaration implements Instruction {
     // boolean y;
     // verify if the variable already exists
     if (ts.existCurrent(this.id)) {
-      // if the variable exists, then return an error
-      let error = new Errors("Semantico", `La variable ${this.id} ya existe`, this.line, this.column);
-      controller.errors.push(error);
       // send to the console
       controller.append(`Error Semantico: La variable ${this.id} ya existe en la linea ${this.line} y columna ${this.column}`);
+      return null;
     }
 
     // verify if the expression is not null
@@ -45,6 +43,7 @@ export class VariableDeclaration implements Instruction {
       if (this.type.enumType == valueType) {
         let newSymbol = new Symbol(1, this.type, this.id, value, undefined, undefined, this.line, this.column);
         ts.add(this.id, newSymbol);
+        TableSymbol.add_to_graph(this.id, newSymbol);
       } else {
         // send to the console
         controller.append(`Error Semantico: El tipo de la variable ${this.id} no coincide con el valor asignado en la linea ${this.line} y columna ${this.column}`);
