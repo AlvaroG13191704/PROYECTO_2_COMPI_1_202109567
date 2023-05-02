@@ -101,17 +101,19 @@ export class IF implements Instruction {
 
   // get the ast of the if
   goOver(): Node {
-    let father = new Node("If", "");
+    let father = new Node("SENTENCIA IF", "");
+    father.addChild(new Node("if", ""));
     // add the condition
     father.addChild(this.condition.goOver());
     // add the instructions if
-    let ifNode = new Node("If Instructions", "");
+    let ifNode = new Node("INSTRUCCIÓN", "");
     for (let inst of this.ifInstructions) {
       ifNode.addChild(inst.goOver());
     }
     father.addChild(ifNode);
     // add the instructions else
-    let elseNode = new Node("Else Instructions", "");
+    let elseNode = new Node("else", "");
+    elseNode.addChild(new Node("INSTRUCCIÓN", ""));
     for (let inst of this.elseInstructions) {
       elseNode.addChild(inst.goOver());
     }

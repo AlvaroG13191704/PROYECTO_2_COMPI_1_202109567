@@ -79,13 +79,11 @@ export class For implements Instruction{
   goOver(): Node {
     let father = new Node("SENTENCIA FOR","")
     father.addChild(new Node("for",""))
-    father.addChild(new Node("(",""))
     father.addChild(this.dec_assing.goOver())
     father.addChild(new Node(";",""))
     father.addChild(this.condition.goOver())
     father.addChild(new Node(";",""))
     father.addChild(this.update.goOver())
-    father.addChild(new Node(")",""))
     let child = new Node("INSTRUCCIONES","")
     for(const inst of this.listInstructions){
       child.addChild(inst.goOver())

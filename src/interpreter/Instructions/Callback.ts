@@ -6,7 +6,6 @@ import { Symbol } from "../TableSymbols/Symbol";
 import { TableSymbol } from "../TableSymbols/TableSymbol";
 import { type } from "../TableSymbols/Type";
 import { Function } from "./Function";
-import { Return } from "./TransferSentences/Return";
 
 export class Callback implements Instruction, Expression {
   // variables
@@ -32,21 +31,21 @@ export class Callback implements Instruction, Expression {
   // get the value
   getValue(controller: Controller, ts: TableSymbol) {
     // verify if the the function exist in the table of symbols
-    if(ts.exist(this.id)){
+    if (ts.exist(this.id)) {
       // create a new table of symbols
       let localST = new TableSymbol(ts);
       // get the symbol of the function / method
       let symbolFunction = ts.getSymbol(this.id) as Function;
 
       // verify if params are correct
-      if(this.validateParams(this.params,symbolFunction.paramLit!, controller, ts, localST)){
+      if (this.validateParams(this.params, symbolFunction.paramLit!, controller, ts, localST)) {
         let ret = symbolFunction.execute(controller, localST);
 
-        if(ret != null){
+        if (ret != null) {
           return ret;
         }
       }
-    }else {
+    } else {
       // error
       controller.append(`Error Semantico: La funcion ${this.id} no existe 1 en la linea ${this.line} y columna ${this.column}`);
     }
@@ -56,31 +55,31 @@ export class Callback implements Instruction, Expression {
   // string holaMundo(){ return "hola mundo"; }
   execute(controller: Controller, ts: TableSymbol) {
     // verify if the the function exist in the table of symbols
-    if(ts.exist(this.id)){
+    if (ts.exist(this.id)) {
       // create a new table of symbols
       let localST = new TableSymbol(ts);
       // get the symbol of the function / method
       let symbolFunction = ts.getSymbol(this.id) as Function;
       // verify if params are correct
-      if(this.validateParams(this.params, symbolFunction.paramLit!, controller, ts, localST)){
+      if (this.validateParams(this.params, symbolFunction.paramLit!, controller, ts, localST)) {
         let ret = symbolFunction.execute(controller, localST);
 
-        if(ret != null){
+        if (ret != null) {
           return ret;
         }
       }
-    }else {
+    } else {
       // error
       controller.append(`Error Semantico: La funcion ${this.id} no existe 2 en la linea ${this.line} y columna ${this.column}`);
-    }    
+    }
   }
 
 
 
   // method to validate the params
-  validateParams(paramsCallback: Expression[], paramsFunction: Symbol[], controller: Controller, ts: TableSymbol, localST: TableSymbol ){
+  validateParams(paramsCallback: Expression[], paramsFunction: Symbol[], controller: Controller, ts: TableSymbol, localST: TableSymbol) {
     // verify the amount of params
-    if(paramsCallback.length == paramsFunction.length){
+    if (paramsCallback.length == paramsFunction.length) {
       // -> params from function / method
       let aux: Symbol;    // param
       let auxId: string; // id param
@@ -92,7 +91,7 @@ export class Callback implements Instruction, Expression {
       let aux_exp_value; // value of the expression
 
       // Verify if each value to assing is the same type as the method params
-      for(let i = 0; i < paramsCallback.length; i++){
+      for (let i = 0; i < paramsCallback.length; i++) {
         // void suma(int n1, int n2){...}
         // suma(1,2);
         // int n1 = 3, n2 = 4;
@@ -105,11 +104,11 @@ export class Callback implements Instruction, Expression {
         aux_exp = paramsCallback[i] as Expression;
         aux_exp_type = aux_exp.getType(controller, ts);
         aux_exp_value = aux_exp.getValue(controller, ts);
-        
+
         // validate if the value of the param of the callback is the same type as the param of the function
-        if(auxType == aux_exp_type){
+        if (auxType == aux_exp_type) {
           // if are the same save each value in the local table of symbols
-          let newSymbol = new Symbol(aux.symbol, aux.type, aux.id, aux_exp_value,undefined, undefined, aux.line, aux.column);
+          let newSymbol = new Symbol(aux.symbol, aux.type, aux.id, aux_exp_value, undefined, undefined, aux.line, aux.column);
           localST.add(auxId, newSymbol);
         }
         else {
@@ -128,13 +127,17 @@ export class Callback implements Instruction, Expression {
 
   // make the function
   goOver(): Node {
-    let father = new Node("LLamada","");
+    let father = new Node("LLamada", "");
     father.addChild(new Node(this.id, ""));
-    father.addChild(new Node("(", ""));
 
-    // TODO: add nodes of the params
+    if (this.params.length > 0) {
+      let params = new Node("Parametros", "");
+      for (let i = 0; i < this.params.length; i++) {
+        params.addChild(this.params[i].goOver());
+      }
+      father.addChild(params);
+    }
 
-    father.addChild(new Node(")", ""));
     return father;
 
   }

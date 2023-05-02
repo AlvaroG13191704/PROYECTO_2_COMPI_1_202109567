@@ -57,8 +57,8 @@ export class Assigment implements Instruction {
   // example: x = 5;
   // create node
   goOver(): Node {
-    let father = new Node("Assigment", "");
-    father.addChild(new Node(this.id, ""));
+    let father = new Node("ASIGNACIÓN", "");
+    father.addChild(new Node(`Identificador: ${this.id}`, ""));
 
     if(this.value != null) {
       father.addChild(this.value.goOver());

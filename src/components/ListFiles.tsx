@@ -10,6 +10,7 @@ const ListFiles = () => {
   // get the store 
   const grammar = analyzeStore((state) => state.grammar);
   const { updateResult } = analyzeStore();
+  const { updateReport } = analyzeStore();
 
   const [files, setFiles] = useState([
     { id: 1, name: "archivoPrueba.tw", active: true },
@@ -31,11 +32,10 @@ const ListFiles = () => {
     let result: AST = parser.parse(grammar)
     let node_root: Node = result.goOver();
     let graph = node_root.graphTree();
-    // console.log(graph)
     // get response
     let controller = new Controller();
     let ts_global = new TableSymbol(null);
-
+    
     result.execute(controller, ts_global);
     console.log(controller.console);
     console.log(result)
@@ -44,6 +44,14 @@ const ListFiles = () => {
     if(controller.console.length > 0){
       updateResult(controller.console)
     }
+    
+    controller.getTableSymbol(controller, ts_global);
+    // update the report
+    updateReport({
+      "table_errors":"",
+      "ast_graph": graph,
+      "symbol_table": ""
+    })
     
   }
   return (

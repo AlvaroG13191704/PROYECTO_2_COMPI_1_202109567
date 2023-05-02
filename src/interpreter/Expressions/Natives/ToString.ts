@@ -41,8 +41,10 @@ export class ToString implements Expression {
     }
   
     goOver(): Node {
-      let father = new Node("ToString", "");
-      father.addChild(this.value.goOver());
+      let father = new Node("FUNCIÓN NATIVA", "");
+      let son = new Node("ToString", "");
+      son.addChild(this.value.goOver());
+      father.addChild(son);
       return father;
     }
 }

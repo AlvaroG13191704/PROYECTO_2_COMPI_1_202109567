@@ -2,6 +2,7 @@ import { Instruction } from "../Abstract/Instruction";
 import { Controller } from "../Controller";
 import { VariableDeclaration } from "../Instructions/Declaration";
 import { Function } from "../Instructions/Function";
+import { Main } from "../Instructions/Main";
 import { TableSymbol } from "../TableSymbols/TableSymbol";
 import { Node } from "./Node";
 
@@ -14,7 +15,7 @@ export class AST implements Instruction {
   }
 
   execute(controller: Controller, ts: TableSymbol) {
-    
+    let main_flag = false;
     // first pass to declare functions and methods
     for(let inst of this.list_instructions){
       if(inst instanceof Function){
@@ -32,9 +33,19 @@ export class AST implements Instruction {
 
     // third pass to execute the rest of the instructions
     for(let instruction of this.list_instructions){
-      if(!(instruction instanceof VariableDeclaration) && !(instruction instanceof Function)){
+      if(instruction instanceof Main && !main_flag){
+        main_flag = true;
         instruction.execute(controller, ts);
+      } else if(main_flag){
+        // error
+        controller.append(`Error Semantico: Ya existe un metodo main en el archivo`);
+        return null;
       }
+
+
+      // if(!(instruction instanceof VariableDeclaration) && !(instruction instanceof Function)){
+      //   instruction.execute(controller, ts);
+      // }
     }
   }
 

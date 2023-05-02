@@ -58,11 +58,11 @@ export class Switch implements Instruction {
 
   // create node
   goOver(): Node {
-    let root = new Node("Switch", "");
-    let condition = new Node("Condition", "");
+    let root = new Node("SENTENCIA SWITCH", "");
+    let condition = new Node("CONDICIÓN", "");
     condition.addChild(this.condition.goOver());
     root.addChild(condition);
-    let cases = new Node("Cases", "");
+    let cases = new Node("CASOS", "");
     for(const c of this.cases){
       cases.addChild(c.goOver());
     }

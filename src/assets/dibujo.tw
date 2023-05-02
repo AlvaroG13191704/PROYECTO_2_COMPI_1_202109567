@@ -10,12 +10,12 @@ void metodo1(){
 void figura1(int n) {
         String cadenaFigura = "";
         double i; 
-        i=-3*n/2;
+        i=-3*n/2.0;
         //iniciando dibujo
         while(i<=n){
             cadenaFigura = "";
             double j; 
-            j=-3*n/2;
+            j=-3*n/2.0;
             while(j<=3*n){
                 double absolutoi;
                 absolutoi = i;

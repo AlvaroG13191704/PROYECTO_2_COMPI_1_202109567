@@ -123,7 +123,7 @@ export class Logic extends Operation implements Expression {
 
   // create graphviz
   goOver(): Node {
-    let father = new Node("Logica","");
+    let father = new Node("OPERACIÓN LÓGICA","");
 
     if (this.expU){
       father.addChild( new Node(this.sign,""));

@@ -46,8 +46,7 @@ export class Identifier implements Expression {
   }
 
   goOver(): Node {
-    let father = new Node("Indetificador", "");
-    father.addChild(new Node(this.identifier, ""));
+    let father = new Node(`Identificador: ${this.identifier}`, "");
     return father;
   }
 

@@ -49,8 +49,10 @@ export class Round implements Expression {
   }
 
   goOver(): Node {
-    let father = new Node("Truncate", "");
-    father.addChild(this.value.goOver());
+    let father = new Node("FUNCIÓN NATIVA", "");
+    let son = new Node("Round", "");
+    son.addChild(this.value.goOver());
+    father.addChild(son);
     return father;
   }
 }

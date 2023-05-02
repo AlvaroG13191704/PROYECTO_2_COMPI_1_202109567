@@ -18,13 +18,11 @@ export class Controller {
   public errors: Errors[];
   public console: string;
   public sent_loop: boolean;
-  public arraySymbols: SymbolTable[];
 
   constructor() {
     this.errors = new Array<Errors>();
     this.console = "";
     this.sent_loop = false;
-    this.arraySymbols = new Array<SymbolTable>();
   }
 
   // append result to the console
@@ -33,17 +31,32 @@ export class Controller {
   }
 
   // retrun a list of the symbol table
-  getTableSymbol(controller: Controller,ts: TableSymbol): SymbolTable[] {
-    ts.table.forEach( (element: Symbol, key: string) => {
-      controller.arraySymbols.push({
-        identifier: element.id,
-        role: controller.getRole(element),
-        type: controller.getType(element),
-        line: element.line,
-        column: element.column
-      });
-    })
-    return controller.arraySymbols;
+  getTableSymbol(controller: Controller, ts: TableSymbol) {
+    let graphviz: string = "digraph SymbolTable {\n";
+    // add the header of the table: Identificador, Tipo, Primitivo,Linea, Columna
+    graphviz += "n[shape=none label = <\n" +
+      " <TABLE border=\"0\" cellspacing=\"0\" cellpadding=\"10\" style=\"collapse\">\n" +
+      "  <TR >\n" +
+      "  <TD colspan=\"6\" border=\"1\">No.</TD>\n" +
+      "  <TD rowspan=\"2\" colspan=\"1\" border=\"1\">Identificador</TD>\n" +
+      "  <TD colspan=\"6\" border=\"1\">Tipo</TD>\n" +
+      "  <TD colspan=\"6\" border=\"1\">Primitivo</TD>\n" +
+      "  <TD colspan=\"6\" border=\"1\">Linea</TD>\n" +
+      "  <TD colspan=\"6\" border=\"1\">Columna</TD>\n" +
+      "  </TR>\n";
+    // add the body of the table
+    while (ts != null) {
+      ts.table.forEach((sim: Symbol, key: string) => {
+        console.log(sim);
+      })
+      ts = ts.previous;
+    }
+    // end
+    graphviz += " </TABLE>\n" +
+      ">];\n" +
+      "}";
+
+    console.log(graphviz);
   }
 
 
@@ -89,9 +102,9 @@ export class Controller {
 
   // get the mount of params
   getParams(symbol: Symbol): string {
-    if(symbol.paramLit !== undefined){
+    if (symbol.paramLit !== undefined) {
       return symbol.paramLit.length.toString();
-    }else{
+    } else {
       return "0";
     }
   }

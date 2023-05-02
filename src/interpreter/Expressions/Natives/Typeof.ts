@@ -19,10 +19,17 @@ export class Typeof implements Expression {
   // return what type of value is
   getType(controller: Controller, ts: TableSymbol): type {
     //evaluate wkat type of value is
-    if (this.value.getType(controller, ts) == type.INTEGER || this.value.getType(controller, ts) == type.DOUBLE || this.value.getType(controller, ts) == type.CHAR || this.value.getType(controller, ts) == type.BOOLEAN || this.value.getType(controller, ts) == type.UNARY) { 
+    if (this.value.getType(controller, ts) == type.INTEGER || 
+    this.value.getType(controller, ts) == type.DOUBLE || 
+    this.value.getType(controller, ts) == type.CHAR || 
+    this.value.getType(controller, ts) == type.BOOLEAN || 
+    this.value.getType(controller, ts) == type.UNARY) { 
       return type.STRING;
     // TODO: add vector and list 
-    } else {
+    }else if(this.value.getType(controller, ts) == type.STRING){
+      return type.STRING;
+    }
+    else {
       // error, the value is not string
       controller.append(`Error Semantico: No existe un tipo para este valor, en la linea ${this.line} y columna ${this.column}`);
       return type.ERROR;
@@ -34,7 +41,7 @@ export class Typeof implements Expression {
     let value = this.value.getValue(controller, ts);
     // evaluate if the value is string
     if (this.value.getType(controller, ts) == type.INTEGER) {
-      return "int";
+      return "integer";
       
     } else if (this.value.getType(controller, ts) == type.DOUBLE) {
       return "double";
@@ -57,8 +64,10 @@ export class Typeof implements Expression {
   }
 
   goOver(): Node {
-    let father = new Node("typeof", "");
-    father.addChild(this.value.goOver());
+    let father = new Node("FUNCIÓN NATIVA", "");
+    let son = new Node("Typeof", "");
+    son.addChild(this.value.goOver());
+    father.addChild(son);
     return father;
   }
 }

@@ -61,12 +61,14 @@ export class DoWhile implements Instruction {
   }
 
   goOver(): Node {
-    let root = new Node("DoWhile","");
+    let root = new Node("SENTENCIA DO WHILE","");
+    root.addChild(new Node("do",""));
     let inst = new Node("Instructions","");
     for(let i of this.listInstruction){
       inst.addChild(i.goOver());
     }
     root.addChild(inst);
+    root.addChild(new Node("while",""));
     root.addChild(this.condition.goOver());
     return root;
   }

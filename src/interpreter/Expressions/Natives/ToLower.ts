@@ -42,8 +42,10 @@ export class ToLower implements Expression {
   }
 
   goOver(): Node {
-    let father = new Node("ToLower", "");
-    father.addChild(this.value.goOver());
+    let father = new Node("FUNCIÓN NATIVA", "");
+    let son = new Node("ToLower", "");
+    son.addChild(this.value.goOver());
+    father.addChild(son);
     return father;
   }
 }

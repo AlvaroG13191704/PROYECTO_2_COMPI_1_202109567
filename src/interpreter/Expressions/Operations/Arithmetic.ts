@@ -823,7 +823,7 @@ export class Arithmetic extends Operation implements Expression {
   }
 
   goOver(): Node {
-    let father = new Node("EXPRESION", "");
+    let father = new Node("OPERACIÓN ARITMETICA", "");
 
     if (this.expU) {
       father.addChild(new Node(this.sign, ""));

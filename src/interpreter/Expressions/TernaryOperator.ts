@@ -57,23 +57,23 @@ export class TernaryOperator implements Expression {
 
   // go over the sub tree of the ternary operator
   goOver(): Node {
-    let father = new Node("Operador ternario", "");
+    let father = new Node("OPERADOR TERNARIO", "");
 
-    let condition = new Node("Condicion", "");
+    let condition = new Node("CONDICIÓN", "");
     condition.addChild(this.condition.goOver());
     father.addChild(condition);
 
     // add symbol
     father.addChild(new Node("?", ""));
 
-    let ifTrue = new Node("Es verdadero", "");
+    let ifTrue = new Node("VERDADERO", "");
     ifTrue.addChild(this.ifTrue.goOver());
     father.addChild(ifTrue);
 
     // add symbol
     father.addChild(new Node(":", ""));
 
-    let ifFalse = new Node("Es falso", "");
+    let ifFalse = new Node("FALSO", "");
     ifFalse.addChild(this.ifFalse.goOver());
     father.addChild(ifFalse);
 

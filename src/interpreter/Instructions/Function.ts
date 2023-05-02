@@ -44,30 +44,30 @@ export class Function extends Symbol implements Instruction {
 
   // create the graph of the function
   goOver(): Node {
-    let father = new Node("Function","");
-    // father.addChild( new Node(this.type.nameType,"") );
+    let father;
+    if(this.symbol == 3){
+      father = new Node("MÉTODO","")
+    }else {
+      father = new Node("FUNCIÓN","")
+    }
     father.addChild( new Node(this.id,"") );
 
-    father.addChild(new Node("(",""));
-
-    // TODO:add the parameters if the function has
-    // if(this.paramLit.length > 0){
-    //   for(let param of this.paramLit){
-    //     father.addChild(param.goOver());
-    //   }
-    // }
-
-    father.addChild(new Node(")",""));
-    father.addChild(new Node("{",""));
+    if(this.paramLit!.length > 0){
+      let args = new Node("ARGUMENTOS","")
+      for(let param of this.paramLit!){
+        let type = param.type.getTypeToString()
+        args.addChild( new Node(`Tipo: ${type}`,"" ));
+        args.addChild( new Node(`Identificador: ${param.id}`,"") );
+      }
+      father.addChild(args);
+    }
 
     // add the instructions if the function has
-    let instructions = new Node("Instructions","");
+    let instructions = new Node("Instrucciones","");
     for(let inst of this.listInstructions){
       instructions.addChild(inst.goOver());
     }
     father.addChild(instructions);
-
-    father.addChild(new Node("}",""));
 
     return father;
   }

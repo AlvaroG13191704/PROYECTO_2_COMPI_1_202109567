@@ -471,7 +471,7 @@ export class Relational extends Operation implements Expression {
   }
   // create graphviz
   goOver(): Node {
-    let father = new Node("Relacionales", "");
+    let father = new Node("OPERACIÓN RELACIONAL", "");
 
     father.addChild(this.exp1.goOver());
     father.addChild(new Node(this.sign, ""));

@@ -17,7 +17,7 @@ true -> primitive -> type = BOOLEAN -> value = true
 export class Primitive implements Expression {
 
   public primitiveValue: any; // refers to the value of the primitive
-  public type:  Type; // refers to the type of the primitive
+  public type: Type; // refers to the type of the primitive
   public line: number;
   public column: number;
 
@@ -56,7 +56,7 @@ export class Primitive implements Expression {
   }
 
   goOver(): Node {
-    let father = new Node("Primitivo","");
+    let father = new Node("PRIMITIVO", "");
     father.addChild(new Node(this.primitiveValue.toString(), ""));
     return father;
   }

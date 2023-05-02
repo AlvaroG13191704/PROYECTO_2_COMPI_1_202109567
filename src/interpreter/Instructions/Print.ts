@@ -35,7 +35,7 @@ export class Print implements Instruction {
   // create node
   goOver(): Node {
     let father = new Node("Print", "");
-    let expression = new Node("Expression", "");
+    let expression = new Node("EXPRESIÓN", "");
     expression.addChild(this.expression.goOver());
     father.addChild(expression);
     return father;

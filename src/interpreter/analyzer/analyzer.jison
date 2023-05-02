@@ -132,6 +132,8 @@ frac                        (?:\.[0-9]+)
 %{
   import { AST } from '../AST/AST';
   import { Type } from '../TableSymbols/Type';
+  // main
+  import { Main } from '../Instructions/Main';
   // INSTRUCTIONS
   import { VariableDeclaration } from '../Instructions/Declaration';
   import { Assigment } from '../Instructions/Assigment';
@@ -156,12 +158,13 @@ frac                        (?:\.[0-9]+)
   import { Logic } from '../Expressions/Operations/Logic';
   import { Relational } from '../Expressions/Operations/Relational';
   // natives
-  import { ToLower } from '../Expressions/Natives/toLower';
+  import { ToLower } from '../Expressions/Natives/ToLower';
   import { ToUpper } from '../Expressions/Natives/ToUpper';
   import { ToString } from '../Expressions/Natives/ToString';
   import { Truncate } from '../Expressions/Natives/Truncate';
   import { Round } from '../Expressions/Natives/Round';
   import { Typeof } from '../Expressions/Natives/Typeof';
+  import { Length } from '../Expressions/Natives/Length';
   // SYmbol
   import { Symbol } from '../TableSymbols/Symbol';
 
@@ -211,7 +214,8 @@ SENTENCES : SENTENCES SENTENCE
           }
           ;
 
-SENTENCE : DECLARATION ';' { $$ = $1; }
+SENTENCE : MAIN        ';' { $$ = $1; }
+         | DECLARATION ';' { $$ = $1; }
          | ASSIGNMENT  ';' { $$ = $1; }
          | PRINT       ';' { $$ = $1; }
          | INCDEC      ';' { $$ = $1; }
@@ -320,6 +324,7 @@ CALLBACK  : id '(' LISTEXP ')' { $$ = new Callback($1,$3,@1.first_line, @1.last_
           | t_truncate '(' EXP ')' {$$ = new Truncate($3,@1.first_line, @1.first_column);}
           | t_round '(' EXP ')'    {$$ = new Round($3,@1.first_line, @1.first_column);}
           | t_typeof '(' EXP ')'   {$$ = new Typeof($3,@1.first_line, @1.first_column);}
+          | t_length '(' EXP ')'   {$$ = new Length($3,@1.first_line, @1.first_column);}
           ;
 
 LISTEXP    : LISTEXP ',' EXP
@@ -339,6 +344,9 @@ TYPE      : tint     { $$ = new Type("INTEGER");}
           | tboolean { $$ = new Type("BOOLEAN");}
           | tchar    { $$ = new Type("CHAR");}
           | tstring  { $$ = new Type("STRING");}
+          ;
+
+MAIN      : t_main CALLBACK { $$ = new Main($2,@1.first_line, @1.last_column); }
           ;
 
 EXP       : EXP '+' EXP            { $$ = new Arithmetic($1,$3,false,@1.first_line, @1.first_column,"+"); }

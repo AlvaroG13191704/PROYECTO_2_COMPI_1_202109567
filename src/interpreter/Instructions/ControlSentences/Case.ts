@@ -31,8 +31,8 @@ export class Case implements Instruction{
 
   goOver(): Node {
     let root = new Node("Case","");
-    root.addChild(new Node("Value","literal"));
-    let instructions = new Node("Instructions","");
+    root.addChild(this.value.goOver());
+    let instructions = new Node("INSTRUCCIÓN","");
     for(const inst of this.instructions){
       instructions.addChild(inst.goOver());
     }

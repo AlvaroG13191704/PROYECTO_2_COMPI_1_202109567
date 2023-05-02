@@ -4,8 +4,7 @@ import { Controller } from "../../Controller";
 import { TableSymbol } from "../../TableSymbols/TableSymbol";
 import { type } from "../../TableSymbols/Type";
 
-export class ToUpper implements Expression {
-
+export class Length implements Expression {
   public value: Expression;
   public line: number;
   public column: number;
@@ -16,36 +15,35 @@ export class ToUpper implements Expression {
     this.column = column;
   }
 
-  // return the type of the value
+  // return what type of value is
   getType(controller: Controller, ts: TableSymbol): type {
     // evaluate if the value is string
+    // TODO: add vector and list
     if (this.value.getType(controller, ts) == type.STRING) {
-      return type.STRING;
+      return type.INTEGER;
     }else {
       // error, the value is not string
-      controller.append(`Error Semantico: El valor no es string en la linea ${this.line} y columna ${this.column}`);
+      controller.append(`Error Semantico: No existe un tipo para este valor, en la linea ${this.line} y columna ${this.column}`);
       return type.ERROR;
     }
   }
-
-  // return the converted to lowercase
+  // return the length of the string, vector or list
   getValue(controller: Controller, ts: TableSymbol) {
-    let value = this.value.getValue(controller, ts);
     // evaluate if the value is string
     if (this.value.getType(controller, ts) == type.STRING) {
-      return value.toUpperCase();
-    }else {
+      return this.value.getValue(controller, ts).length;
+    }
+    // TODO: add vector and list 
+    else {
       // error, the value is not string
-      controller.append(`Error Semantico: El valor no pudo ser convertido a mayusculas en la linea ${this.line} y columna ${this.column}`);
+      controller.append(`Error Semantico: El valor no es una cadena de texto, vector o lista, en la linea ${this.line} y columna ${this.column}`);
       return null;
     }
   }
 
   goOver(): Node {
-    let father = new Node("FUNCIÓN NATIVA", "");
-    let son = new Node("ToUpper", "");
-    son.addChild(this.value.goOver());
-    father.addChild(son);
+    let father = new Node("legth", "");
+    father.addChild(this.value.goOver());
     return father;
   }
 }

@@ -73,10 +73,10 @@ export class VariableDeclaration implements Instruction {
   }
 
   goOver(): Node {
-    let father = new Node("DECLARACION", "");
-    father.addChild(new Node(this.type.nameType, ""));
+    let father = new Node("DECLARACIÓN DE VARIABLE", "");
+    father.addChild(new Node(`Tipo: ${this.type.nameType}`, ""));
 
-    father.addChild(new Node(this.id, ""));
+    father.addChild(new Node(`Identificador: ${this.id}`, ""));
 
     if (this.expression !== null) {
       father.addChild(this.expression.goOver());
