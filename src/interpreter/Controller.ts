@@ -91,7 +91,7 @@ export class Controller {
         role = "Vector";
         break;
       case 5:
-        role = "Lita";
+        role = "Lista";
         break;
       case 6:
         role = "param";

@@ -18,10 +18,11 @@ export class Length implements Expression {
   // return what type of value is
   getType(controller: Controller, ts: TableSymbol): type {
     // evaluate if the value is string
-    // TODO: add vector and list
-    if (this.value.getType(controller, ts) == type.STRING) {
+    console.log(this.value.getType(controller, ts));
+    if (this.value.getType(controller, ts) == type.STRING || this.value.getType(controller, ts) == type.VECTOR || this.value.getType(controller, ts) == type.LIST) {
       return type.INTEGER;
-    }else {
+    }
+    else {
       // error, the value is not string
       controller.append(`Error Semantico: No existe un tipo para este valor, en la linea ${this.line} y columna ${this.column}`);
       return type.ERROR;
@@ -30,10 +31,10 @@ export class Length implements Expression {
   // return the length of the string, vector or list
   getValue(controller: Controller, ts: TableSymbol) {
     // evaluate if the value is string
-    if (this.value.getType(controller, ts) == type.STRING) {
+    // console.log(this.value.getValue(controller, ts));
+    if (this.value.getType(controller, ts) == type.STRING || this.value.getType(controller, ts) == type.VECTOR || this.value.getType(controller, ts) == type.LIST) {
       return this.value.getValue(controller, ts).length;
     }
-    // TODO: add vector and list 
     else {
       // error, the value is not string
       controller.append(`Error Semantico: El valor no es una cadena de texto, vector o lista, en la linea ${this.line} y columna ${this.column}`);
@@ -42,7 +43,7 @@ export class Length implements Expression {
   }
 
   goOver(): Node {
-    let father = new Node("legth", "");
+    let father = new Node("length", "");
     father.addChild(this.value.goOver());
     return father;
   }

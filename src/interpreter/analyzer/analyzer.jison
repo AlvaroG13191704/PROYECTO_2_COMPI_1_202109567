@@ -152,7 +152,10 @@ frac                        (?:\.[0-9]+)
   import { Callback } from '../Instructions/Callback';
   // DATA STRUCTURES
   import { Vector } from '../Instructions/Vector';
+  import { List } from '../Instructions/List';
   import { ModifyVector } from '../Instructions/DataStructure/ModifyVector';
+  import { ModifyList } from '../Instructions/DataStructure/ModifyList';
+  import { AddList } from '../Instructions/DataStructure/AddList';
   // EXPRESSIONS
   import { Identifier } from '../Expressions/Identifier';
   import { Primitive } from '../Expressions/Primitive';
@@ -162,6 +165,7 @@ frac                        (?:\.[0-9]+)
   import { Relational } from '../Expressions/Operations/Relational';
   // data structures
   import { AccessVector } from '../Expressions/DataStructures/Vector/AccessVector';
+  import { AccessList } from '../Expressions/DataStructures/List/AccessList';
   // natives
   import { ToLower } from '../Expressions/Natives/ToLower';
   import { ToUpper } from '../Expressions/Natives/ToUpper';
@@ -269,6 +273,14 @@ DECLARATION : TYPE id '=' EXP
             {
               $$ = new Vector(2, $1,$4,null,$7, @1.first_line, @1.first_column);
             }
+            | t_list '<' TYPE '>' id '=' t_new t_list '<' TYPE '>'
+            {
+              $$ = new List(1, $3,$5,null, @1.first_line, @1.first_column);
+            }
+            | t_list '<' TYPE '>' id '=' t_toCharArray '(' EXP ')'
+            {
+              $$ = new List(2, $3,$5,$9, @1.first_line, @1.first_column);
+            }
             ;
 
 ASSIGNMENT : id '=' EXP 
@@ -278,6 +290,10 @@ ASSIGNMENT : id '=' EXP
            | id '[' EXP ']' '=' EXP 
             {
               $$ = new ModifyVector($1, $3, $6, @1.first_line, @1.first_column);
+            }
+           | id '[''[' EXP ']'']' '=' EXP 
+            {
+              $$ = new ModifyList($1, $4, $8, @1.first_line, @1.first_column);
             }
            ;
 
@@ -348,6 +364,8 @@ LIST_PARAM : LIST_PARAM ',' TYPE id {$$ = $1; $$.push(new Symbol(6, $3, $4, null
 CALLBACK  : id '(' LISTEXP ')' { $$ = new Callback($1,$3,@1.first_line, @1.last_column); }
           | id '(' ')' { $$ = new Callback($1,[],@1.first_line, @1.last_column); }
           | id '[' EXP ']' { $$ = new AccessVector($1,$3,@1.first_line, @1.last_column); }
+          | id '[''[' EXP ']'']' { $$ = new AccessList($1,$4,@1.first_line, @1.last_column); }
+          | id '.' t_add '(' EXP ')' { $$ = new AddList($1,$5,@1.first_line, @1.last_column); }
           | t_toLower '(' EXP ')'  {$$ = new ToLower($3,@1.first_line, @1.first_column);}
           | t_toUpper '(' EXP ')'  {$$ = new ToUpper($3,@1.first_line, @1.first_column);}
           | t_toString '(' EXP ')' {$$ = new ToString($3,@1.first_line, @1.first_column);}

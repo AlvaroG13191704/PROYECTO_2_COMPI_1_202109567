@@ -46,7 +46,6 @@ const ListFiles = () => {
     }
     
     let ts_graph = controller.getTableSymbol(controller, ts_global);
-    console.log(ts_graph)
     //clean the symbol table
     TableSymbol.cleanTable();
     // update the report

@@ -42,6 +42,9 @@ export class Type {
       return type.STRING;
     }else if(this.nameType === "VECTOR"){
       return type.VECTOR;
+      
+    }else if(this.nameType === "LISTA"){
+      return type.LIST;
     }
     else if(this.nameType === "VOID"){
       return type.VOID;
