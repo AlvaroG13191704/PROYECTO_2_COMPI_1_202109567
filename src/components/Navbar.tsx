@@ -12,12 +12,28 @@ import Graphviz from 'graphviz-react'
 
 
 
+interface windows {
+  id: number;
+  nameFile: string;
+  grammar: string;
+  open: boolean;
+}
 
 const Navbar = () => {
+
+  // state to change the grammar
+  const { updateCurrentCode, updateWindows } = analyzeStore();
+
+  // import grammar
+  const grammar = analyzeStore((state) => state.grammar);
+  const windows = analyzeStore((state) => state.windows);
+
   const reportsGraphs = analyzeStore((state) => state.reports);
   // open modal
   const [open, setOpen] = useState(false)
   const [report, setReport] = useState(0); // 1 = errores, 2 = ast, 3 = tabla de simbolos
+  const [selectedFile, setSelectedFile] = useState<File | undefined>();
+  const [fileContents, setFileContents] = useState<string | undefined>();
 
   const handleModal = (value: number) => {
     setOpen(!open)
@@ -38,20 +54,107 @@ const Navbar = () => {
     { name: 'Generar Árbol AST (Árbol de Análisis Sintáctico)', description: 'se debe generar una imagen del árbol de análisis sintáctico que se genera al realizar los análisis', function: () => handleModal(2), icon: ChartBarIcon },
     { name: 'Reporte de Tabla de Símbolos:', description: 'Se mostrarán todas las variables, métodos y funciones que han sido declarados dentro del flujo del programa', function: () => handleModal(3), icon: TableCellsIcon },
   ]
+
+
+  // load a file
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setSelectedFile(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const contents = event.target?.result as string;
+        setFileContents(contents);
+      };
+      reader.readAsText(file);
+    } else {
+      setFileContents(undefined);
+    }
+  };
+
+  // save a file
+  const handleSave = () => {
+    const blob = new Blob([grammar], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = "test.tw";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (selectedFile) {
+      // console.log(selectedFile.name);
+      // console.log(fileContents);
+      // update the state
+      updateCurrentCode(fileContents!);
+      // update windows
+      const newWindow: windows = {
+        id: windows.length + 1,
+        nameFile: selectedFile.name,
+        grammar: fileContents!,
+        open: true
+      }
+      // set all windows to false
+      windows.forEach(window => {
+        window.open = false;
+      });
+
+      updateWindows([...windows, newWindow]);
+
+    }
+  };
+
+  // create a new file
+  const handleNewFile = () => {
+    // get the value from the input
+    const fileName = document.querySelector('input[type="text"]') as HTMLInputElement;
+
+    if (fileName.value === '') return;
+    const newWindow: windows = {
+      id: windows.length + 1,
+      nameFile: `${fileName.value}.tw`,
+      grammar: '',
+      open: false
+    }
+    // update the state
+    updateWindows([...windows, newWindow]);
+    // console.log(windows)
+  }
+
+  // delete actual window
+  const handleDeleteActualWindow = () => {
+    // get the actual window
+    const actualWindow = windows.filter(window => window.open === true);
+    // console.log(actualWindow[0].id)
+    // delete the actual window
+    const newWindows = windows.filter(window => window.id !== actualWindow[0].id);
+    // update the state
+    updateWindows(newWindows);
+  }
+
+
   return (
     <>
       <header className="bg-gray-900">
-        <nav className="mx-auto flex max-w-7xl items-center justify-around p-6 lg:px-8" aria-label="Global">
-          <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400 ">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+          {/* Form to create a new file */}
+          <input type="text" placeholder="Nombre del archivo" className="text-sm font-semibold leading-6 text-black " />
+          <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400 " onClick={handleNewFile}>
             Crear archivos
           </button>
-          <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400">
-            Abrir archivos
-          </button>
-          <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400">
+          <form onSubmit={handleSubmit}>
+            <input type="file" onChange={handleFileChange} className='text-sm font-semibold leading-6 text-white hover:text-gray-400' />
+            <button type="submit" className='text-sm font-semibold leading-6 text-white hover:text-gray-400'>Cargar</button>
+          </form>
+          <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400" onClick={handleSave}>
             Guardar archivo
           </button>
-          <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400">
+          <button className="text-sm font-semibold leading-6 text-white hover:text-gray-400" onClick={handleDeleteActualWindow}>
             Eliminar pestaña
           </button>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
@@ -131,7 +234,7 @@ const Navbar = () => {
                     </div>
                     <div>
                       {
-                        ( reportsGraphs.ast_graph === "" || reportsGraphs.symbol_table === "") ?
+                        (reportsGraphs.table_errors === "" || reportsGraphs.ast_graph === "" || reportsGraphs.symbol_table === "") ?
                           ("No hay reporte disponible")
                           : ((report === 1) ?
                             (<Graphviz dot={reportsGraphs.table_errors} options={{ zoom: true, width: 1240, height: 500, }} />)

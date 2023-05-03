@@ -6,7 +6,9 @@ import { analyzeStore } from '../store/resultStore';
 export const TextEditor = () => {
 
   // state
-  const { updateCurrentCode } = analyzeStore()
+  const { updateCurrentCode } = analyzeStore();
+
+  const grammar = analyzeStore((state) => state.grammar);
 
   // get the value of the editor
   const handleEditorDidMount = (getValue: any, monacoEditor: any) => {
@@ -14,6 +16,7 @@ export const TextEditor = () => {
     updateCurrentCode(getValue)
   };
 
+  // console.log(grammar)
 
   return (
     // Agregar un boton
@@ -27,8 +30,10 @@ export const TextEditor = () => {
         automaticLayout: true,
       }}
       onChange={handleEditorDidMount}
-      height="61%"
+      height="55%"
       defaultLanguage="java"
+      // set the grammar with the true open window
+      value={ grammar }
     />
   )
 }

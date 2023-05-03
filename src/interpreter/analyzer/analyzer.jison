@@ -125,12 +125,18 @@ frac                        (?:\.[0-9]+)
 \"(?:[{cor1}|{cor2}]|["\\"]["bnrt/["\\"]]|[^"["\\"])*\"         yytext = yytext.substr(1,yyleng-2);     return 'words';
 
 <<EOF>>                        { return 'EOF'; }  /* end of file */ 
-.                               {console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);}
+.               {
+                console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+                new Errors("Lexico", `El caracter ${yytext} no pertenece al lenguaje`, yylloc.first_line, yylloc.first_column);
+                }
 
 /lex
 
 %{
   import { AST } from '../AST/AST';
+  // errors
+  import { Errors } from '../AST/Errors';
+  // table
   import { Type } from '../TableSymbols/Type';
   // main
   import { Main } from '../Instructions/Main';
@@ -176,6 +182,7 @@ frac                        (?:\.[0-9]+)
   import { Length } from '../Expressions/Natives/Length';
   // SYmbol
   import { Symbol } from '../TableSymbols/Symbol';
+
 
 %}
 /* =================== ASSOCIATION AND PRECEDENCE OF OPERATORS =================== */
@@ -251,6 +258,10 @@ SENTENCE : MAIN        ';' { $$ = $1; }
          | t_continue  ';' { $$ = new Continue(); }
          | t_return    ';' { $$ = new Return(null); }
          | t_return EXP';' { $$ = new Return($2); }
+         | error   {
+                      console.error('Este es un error sintactico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' +this._$.first_column);
+                      new Errors("Sintactico", `El caracter ${yytext} no pertenece al lenguaje`, this._$.first_line, this_$.first_column);
+                    }
          ;
 
 DECLARATION : TYPE id '=' EXP
