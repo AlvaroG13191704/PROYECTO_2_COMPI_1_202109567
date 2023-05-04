@@ -7,6 +7,13 @@ interface windows {
   open: boolean;
 }
 
+interface errorTable {
+  type: string;
+  description: string;
+  line: number;
+  column: number;
+}
+
 interface ResultStore {
   result: string;
   grammar:string;
@@ -16,11 +23,13 @@ interface ResultStore {
     ast_graph: string;
     symbol_table: string;
   }
+  errorTable: errorTable[];
   updateCurrentCode: (code: string) => void;
   updateResult: (code: string) => void;
   updateReport: (report: any) => void;
   updateWindows: (windows: windows[]) => void;
   deleteWindows: (windows: windows[]) => void;
+  updateErrorTable: (errorTable: errorTable[]) => void;
 }
 
 export const analyzeStore = create<ResultStore>((set) => ({
@@ -37,6 +46,7 @@ export const analyzeStore = create<ResultStore>((set) => ({
     ast_graph: "",
     symbol_table: "",
   },
+  errorTable: [],
   updateCurrentCode: (code) => set({ grammar: code }),
   updateResult: (code:string) => set({ result: code }),
   updateReport: (report) => set({ reports: report }),
@@ -44,4 +54,5 @@ export const analyzeStore = create<ResultStore>((set) => ({
   updateWindows: (windows) => set({ windows: windows }),
   // delete the list
   deleteWindows: (windows) => set({ windows: windows }),
+  updateErrorTable: (errorTable) => set({ errorTable: errorTable }),
 }))

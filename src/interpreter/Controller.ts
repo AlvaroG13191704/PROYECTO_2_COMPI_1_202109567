@@ -1,6 +1,6 @@
 // this class is the controller of the interpreter
 
-import { Errors, errorList } from "./AST/Errors";
+import { Errors } from "./AST/Errors";
 import { Symbol } from "./TableSymbols/Symbol";
 import { TableSymbol } from "./TableSymbols/TableSymbol";
 
@@ -47,38 +47,7 @@ export class Controller {
     return graphviz;
   }
 
-  // generate the graphviz of the errors
-  getErrors():string {
-    errorList.Errors.forEach((error: Errors) => {
-      this.errors.push(error);
-    });
 
-    let graphviz: string = "digraph Errors {\n";
-    // add the header of the table: Identificador, Tipo, Primitivo,Linea, Columna
-    graphviz += "node [shape=plaintext];\n" +
-      " table [label=<\n" +
-      "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">\n" +
-      "<tr><td>Tipo</td><td>Descripción</td><td>Linea</td><td>Columna</td></tr>\n";
-    // end
-    // access to the static list of the table symbol
-    if (this.errors !== undefined) {
-      this.errors.forEach((error: Errors) => {
-        // add the row of the table
-        graphviz += "<tr><td>" + error.type + "</td><td>" + error.description + "</td><td>" + error.line + "</td><td>" + error.column + "</td></tr>\n";
-        // end
-      })
-    }
-    // end
-    graphviz += " </table>\n" +
-      ">];\n" +
-      "}";
-    return graphviz;
-  }
-
-  // clean the errors
-  cleanErrors(): void {
-    errorList.Errors = new Array<Errors>();
-  }
 
   // get the value of the table
   getValue(symbol: Symbol): string {

@@ -258,10 +258,10 @@ SENTENCE : MAIN        ';' { $$ = $1; }
          | t_continue  ';' { $$ = new Continue(); }
          | t_return    ';' { $$ = new Return(null); }
          | t_return EXP';' { $$ = new Return($2); }
-         | error   {
-                      console.error('Este es un error sintactico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' +this._$.first_column);
-                      new Errors("Sintactico", `El caracter ${yytext} no pertenece al lenguaje`, this._$.first_line, this_$.first_column);
-                    }
+        //  | error   {
+        //               console.error('Este es un error sintactico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' +this._$.first_column);
+        //               new Errors("Sintactico", `El caracter ${yytext} no pertenece al lenguaje`, this._$.first_line, this_$.first_column);
+        //             }
          ;
 
 DECLARATION : TYPE id '=' EXP

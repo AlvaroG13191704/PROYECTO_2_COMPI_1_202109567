@@ -4,7 +4,7 @@ import { AST } from "../interpreter/AST/AST";
 import { Node } from "../interpreter/AST/Node";
 import { Controller } from "../interpreter/Controller";
 import { TableSymbol } from "../interpreter/TableSymbols/TableSymbol";
-import { errorList } from "../interpreter/AST/Errors";
+import { Errors } from "../interpreter/AST/Errors";
 
 const ListFiles = () => {
 
@@ -33,6 +33,7 @@ const ListFiles = () => {
   const handleExecute = () => {
     // generate the graphviz
     let parser: any = new AnalyzerParser()
+
     let result: AST = parser.parse(grammar)
     let node_root: Node = result.goOver();
     let graph = node_root.graphTree();
@@ -49,11 +50,11 @@ const ListFiles = () => {
     }
 
     let ts_graph = controller.getTableSymbol(controller, ts_global);
-    let t_errors = controller.getErrors();
+    let t_errors = Errors.getErrors();
+    console.log(t_errors);
+    Errors.cleanErrors();
     //clean the symbol table
     TableSymbol.cleanTable();
-    // clean errors
-    // errorList.Errors = [];
     // update the report
     updateReport({
       "table_errors": t_errors,
