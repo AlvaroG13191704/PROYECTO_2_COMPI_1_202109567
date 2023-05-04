@@ -9,7 +9,7 @@
 * 202109567 - Alvaro Norberto García Meza
 
 ## **Manual de Usuario**
-[manual usuario](docs/user/user.md)
+[manual usuario](doc/user/user.md)
 
 ## **Manual Técnico**
-[manual tecnico](docs/tech/tech.md)
+[manual tecnico](doc/tech/tech.md)
